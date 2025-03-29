@@ -1,0 +1,22 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+.fl-flasher.fl-container, .fl-wrapper{
+	z-index: 999999 !important;
+}
+
+table th, table td{
+	max-width: 300px;
+	overflow-x: auto;
+
+	-ms-overflow-style: none;
+    scrollbar-width: none;
+
+    padding-left: 6px;
+}
+
+table, table th, table td{
+	border: 1px solid #F8F8F8;
+}
