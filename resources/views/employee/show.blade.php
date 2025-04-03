@@ -55,7 +55,7 @@
                                 </div>
                                 <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                                     <dt class="text-sm font-medium leading-6 text-gray-900">Attachment</dt>
-                                    <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{{ $employee->attachment }}</dd>
+                                    <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0"><a href="{{ url('storage/images/users/') }}/{{ $employee->attachment }}" target="_blank"><img class="rounded-lg" src="{{ url('storage/images/users/') }}/{{ $employee->attachment }}" style="height: 300px;width:300px;object-fit: cover;"></a></dd>
                                 </div>
                                 <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                                     <dt class="text-sm font-medium leading-6 text-gray-900">Aadhar Name</dt>

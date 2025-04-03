@@ -70,9 +70,17 @@ class Item extends Model
         return $this->ItemSubCategory ? $this->ItemSubCategory->name : '-';
     }
 
-    public function customerDetails()
+    public function imageDetails()
     {
-        return $this->hasMany(\App\Models\ItemImages::class, 'id', 'items_id');
+        return $this->hasMany(\App\Models\ItemImage::class, 'items_id', 'id');
     }
+
+    public function getImages()
+    {
+        // Check if parentCategory exists and return its name
+        return $this->imageDetails ? $this->imageDetails->name : ' ';
+    }
+
+
     
 }

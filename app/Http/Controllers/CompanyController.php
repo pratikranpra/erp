@@ -16,7 +16,7 @@ class CompanyController extends Controller
      */
     public function index(Request $request): View
     {
-        $companies = Company::paginate();
+        $companies = Company::orderBy('id', 'desc')->paginate();
 
         return view('company.index', compact('companies'))
             ->with('i', ($request->input('page', 1) - 1) * $companies->perPage());

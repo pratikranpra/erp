@@ -9,6 +9,9 @@ use App\Http\Requests\EmployeeRequest;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
 
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Log;
+
 class EmployeeController extends Controller
 {
     /**
@@ -16,7 +19,7 @@ class EmployeeController extends Controller
      */
     public function index(Request $request): View
     {
-        $employees = Employee::paginate();
+        $employees = Employee::orderBy('id', 'desc')->paginate();
 
         return view('employee.index', compact('employees'))
             ->with('i', ($request->input('page', 1) - 1) * $employees->perPage());
@@ -37,7 +40,22 @@ class EmployeeController extends Controller
      */
     public function store(EmployeeRequest $request): RedirectResponse
     {
-        Employee::create($request->validated());
+        $item = Employee::create($request->validated());
+        Log::debug($request);
+
+        // Main image
+        if ($request->hasFile('attachment')) {
+            $mainImage = $request->file('attachment');
+            $extension = $mainImage->getClientOriginalExtension(); 
+            $mainImageName = Str::random(40) . '_main.' . $extension; 
+            $mainImagePath = $mainImage->storeAs('images/users/', $mainImageName, 'public');
+
+            Log::debug('Main Image Path: ' . $mainImagePath);
+
+            Employee::find($item->id)->update(['attachment' => $mainImageName]);
+        } else {
+            Log::debug('No main image uploaded');
+        }
 
         return Redirect::route('employees.index')
             ->with('success', 'Employee created successfully.');

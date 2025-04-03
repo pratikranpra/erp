@@ -18,7 +18,7 @@ class BranchController extends Controller
      */
     public function index(Request $request): View
     {
-        $branches = Branch::with('company')->paginate();
+        $branches = Branch::with('company')->orderBy('id', 'desc')->paginate();
 
         return view('branch.index', compact('branches'))
             ->with('i', ($request->input('page', 1) - 1) * $branches->perPage());

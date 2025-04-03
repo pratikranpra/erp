@@ -57,4 +57,9 @@ class ItemImage extends Model
         return $this->ItemCategory ? $this->ItemCategory->name : '-';
     }
 
+    public function item()
+    {
+        return $this->belongsTo(\App\Models\Item::class, 'items_id', 'id');
+    }
+
 }

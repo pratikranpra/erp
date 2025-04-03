@@ -27,7 +27,7 @@
     </div>
     <div>
         <x-input-label for="home_contact" :value="__('Home Contact')"/>
-        <x-text-input id="home_contact" name="home_contact" type="text" class="mt-1 block w-full" :value="old('home_contact', $employee?->home_contact)" autocomplete="home_contact" placeholder="Home Contact"/>
+        <x-text-input id="home_contact" name="home_contact" type="number" class="mt-1 block w-full" :value="old('home_contact', $employee?->home_contact)" autocomplete="home_contact" placeholder="Home Contact"/>
         <x-input-error class="mt-2" :messages="$errors->get('home_contact')"/>
     </div>
     <div>
@@ -36,9 +36,11 @@
         <x-input-error class="mt-2" :messages="$errors->get('aadhar_no')"/>
     </div>
     <div>
-        <x-input-label for="attachment" :value="__('Attachment')"/>
-        <x-text-input id="attachment" name="attachment" type="file" class="mt-1 block w-full" :value="old('attachment', $employee?->attachment)" autocomplete="attachment" placeholder="Attachment"/>
-        <x-input-error class="mt-2" :messages="$errors->get('attachment')"/>
+        <x-input-label for="name" :value="__('Item image')"/>
+        <input type="file" id="attachment" name="attachment" placeholder="Your main image">
+        @error('attachment')
+            <p class="text-red-500">{{ $message }}</p>
+        @enderror
     </div>
     <div>
         <x-input-label for="aadhar_name" :value="__('Aadhar Name')"/>

@@ -53,7 +53,7 @@
 										<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $employee->contact }}</td>
 										<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $employee->home_contact }}</td>
 										<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $employee->aadhar_no }}</td>
-										<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $employee->attachment }}</td>
+										<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"><img class="rounded-lg" src="{{ url('storage/images/users/') }}/{{ $employee->attachment }}" style="height: 100px;width:100px;object-fit: cover;"></td>
 										<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $employee->aadhar_name }}</td>
 										<td>
                                             <label class="inline-flex items-center cursor-pointer">

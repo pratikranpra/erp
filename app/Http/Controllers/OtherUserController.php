@@ -16,7 +16,7 @@ class OtherUserController extends Controller
      */
     public function index(Request $request): View
     {
-        $otherUsers = OtherUser::orderBy('id', 'desc')->paginate(10);
+        $otherUsers = OtherUser::orderBy('id', 'desc')->paginate();
 
         return view('other_users.index', compact('otherUsers'))
             ->with('i', ($request->input('page', 1) - 1) * $otherUsers->perPage());

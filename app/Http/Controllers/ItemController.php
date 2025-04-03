@@ -16,7 +16,6 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Log;
 
 
-
 class ItemController extends Controller
 {
     /**
@@ -24,7 +23,7 @@ class ItemController extends Controller
      */
     public function index(Request $request): View
     {
-        $items = Item::paginate();
+        $items = Item::with('imageDetails')->orderBy('id', 'desc')->paginate();
 
         return view('item.index', compact('items'))
             ->with('i', ($request->input('page', 1) - 1) * $items->perPage());
@@ -49,7 +48,6 @@ class ItemController extends Controller
     public function store(ItemRequest $request): RedirectResponse
     {
         $item = Item::create($request->validated());
-
         Log::debug($request);
 
         // Main image
@@ -98,7 +96,7 @@ class ItemController extends Controller
      */
     public function show($id): View
     {
-        $item = Item::find($id);
+        $item = Item::with('imageDetails')->find($id);
 
         return view('item.show', compact('item'));
     }

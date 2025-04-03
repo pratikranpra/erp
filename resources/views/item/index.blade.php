@@ -28,6 +28,7 @@
                                         <th scope="col" class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">No</th>
                                         
 									<th scope="col" class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">Sku</th>
+                                    <th scope="col" class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">Main Image</th>
 									<th scope="col" class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">Name</th>
 									<th scope="col" class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">Description</th>
 									<th scope="col" class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">Category Id</th>
@@ -50,6 +51,11 @@
                                             <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-semibold text-gray-900">{{ ++$i }}</td>
                                             
 										<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $item->sku }}</td>
+                                        @if(!empty($item->imageDetails) && isset($item->imageDetails[0]))
+                                            <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"><img class="rounded-lg" src="{{ url('storage/images/items/') }}/{{ $item->imageDetails[0]->name }}" style="height: 75px;width: 75px;object-fit: cover;"></td>
+                                        @else
+                                            <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">N/A</td>
+                                        @endif
 										<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $item->name }}</td>
 										<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $item->description }}</td>
 										<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $item->parent_category_name }}</td>

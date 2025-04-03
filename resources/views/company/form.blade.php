@@ -6,8 +6,9 @@
         <x-input-error class="mt-2" :messages="$errors->get('name')"/>
     </div>
     <div>
+
         <x-input-label for="description" :value="__('Description')"/>
-        <x-text-input id="description" name="description" type="text" class="mt-1 block w-full" :value="old('description', $company?->description)" autocomplete="description" placeholder="Description"/>
+        <textarea id="description" name="description" type="text" class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm" rows="5" autocomplete="description" placeholder="Description">{{ old('description', $company->description) }}</textarea>
         <x-input-error class="mt-2" :messages="$errors->get('description')"/>
     </div>
     <div>

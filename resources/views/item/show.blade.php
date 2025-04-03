@@ -33,6 +33,35 @@
                                     <dt class="text-sm font-medium leading-6 text-gray-900">Name</dt>
                                     <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{{ $item->name }}</dd>
                                 </div>
+
+                                @if(!empty($item->imageDetails) && isset($item->imageDetails))
+                                    <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                                        @foreach($item->imageDetails as $key => $value)
+                                            @if($value->type == 'main')
+                                                <h3 class="text-[16px] my-4">Main Image</h3>
+                                                <div class="inline-block float-left mx-4 h-[250px] w-[250px]">
+                                                    <img class="rounded-lg max-w-[100%]  max-h-[100%]" src="{{ url('storage/images/items/') }}/{{ $item->imageDetails[0]->name }}">
+                                                </div>
+                                            @endif
+                                        @endforeach
+                                        <div class="clear-both"></div>
+                                    </div>
+
+                                    <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                                        <h3 class="text-[16px] my-4">Sub Image</h3>
+                                        <div>
+                                            @foreach($item->imageDetails as $key => $value)
+                                                @if($value->type == 'sub')
+                                                    <div class="inline-block float-left mx-4 h-[250px] w-[250px]">
+                                                        <img class="rounded-lg max-w-[100%] max-h-[100%]" src="{{ url('storage/images/items/') }}/{{ $item->imageDetails[0]->name }}">
+                                                    </div>
+                                                @endif
+                                            @endforeach
+                                            <div class="clear-both"></div>
+                                        </div>
+                                    </div>
+                                @endif
+
                                 <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                                     <dt class="text-sm font-medium leading-6 text-gray-900">Description</dt>
                                     <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{{ $item->description }}</dd>

@@ -16,7 +16,7 @@ class VendorController extends Controller
      */
     public function index(Request $request): View
     {
-        $vendors = Vendor::orderBy('id', 'desc')->paginate(10);
+        $vendors = Vendor::orderBy('id', 'desc')->paginate();
 
         return view('vendor.index', compact('vendors'))
             ->with('i', ($request->input('page', 1) - 1) * $vendors->perPage());

@@ -28,7 +28,7 @@ class EmployeeRequest extends FormRequest
 			'sub_department' => 'string',
 			'contact' => 'required',
 			'aadhar_no' => 'required|string',
-			'attachment' => 'required|string',
+			'attachment' => 'nullable',
 			'aadhar_name' => 'required|string',
         ];
     }

@@ -16,7 +16,7 @@ class CategoryController extends Controller
      */
     public function index(Request $request): View
     {
-        $categories  = Category::with('parentCategory')->paginate();
+        $categories  = Category::with('parentCategory')->orderBy('id', 'desc')->paginate();
 
         return view('category.index', compact('categories'))
             ->with('i', ($request->input('page', 1) - 1) * $categories->perPage());
