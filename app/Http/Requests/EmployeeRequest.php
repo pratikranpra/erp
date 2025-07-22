@@ -30,6 +30,8 @@ class EmployeeRequest extends FormRequest
 			'aadhar_no' => 'required|string',
 			'attachment' => 'nullable',
 			'aadhar_name' => 'required|string',
+            'role_id' => 'required',
+            'branch_ids' => 'required',
         ];
     }
 }

@@ -10,6 +10,19 @@
         <x-text-input id="user_pin" name="user_pin" type="number" class="mt-1 block w-full" :value="old('user_pin', $employee?->user_pin)" autocomplete="user_pin" placeholder="User Pin"/>
         <x-input-error class="mt-2" :messages="$errors->get('user_pin')"/>
     </div>
+
+    <div>
+        <x-input-label for="role_id" :value="__('User Role')"/>
+        <x-text-select id="role_id" name="role_id" class="mt-4" label="" :options="$all_roles" :value="$value"  />
+        <x-input-error class="mt-2 w-full" :messages="$errors->get('role_id')"/>
+    </div>
+
+    <div>
+        <x-input-label for="user_branches" :value="__('User Branch')"/>
+        <x-text-select :multiple="true" id="branch_ids" name="branch_ids" class="mt-4" label="" :options="$all_branches" :value="$branch_value"  />
+        <x-input-error class="mt-2" :messages="$errors->get('user_branches')"/>
+    </div>
+
     <div>
         <x-input-label for="department" :value="__('Department')"/>
         <x-text-input id="department" name="department" type="text" class="mt-1 block w-full" :value="old('department', $employee?->department)" autocomplete="department" placeholder="Department"/>

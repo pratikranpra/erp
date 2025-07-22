@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class BranchRequest extends FormRequest
+class GstMasterRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,13 +22,10 @@ class BranchRequest extends FormRequest
     public function rules(): array
     {
         return [
-			'name' => 'required|string',
-			'address' => 'required|string',
-			'handled_by' => 'required|string',
-			'company_id' => 'required',
-            'gst_no' => 'string',
-            'city' => 'required|string',
-            'state' => 'required|string',
+			'category_id' => 'required',
+			'gst_range_min' => 'required|string',
+            'gst_range_max' => 'required|string',
+			'gst_no' => 'required|string',
         ];
     }
 }

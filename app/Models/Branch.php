@@ -32,7 +32,7 @@ class Branch extends Model
      *
      * @var array<int, string>
      */
-    protected $fillable = ['name', 'address', 'handled_by', 'company_id', 'status'];
+    protected $fillable = ['name', 'address', 'handled_by', 'company_id', 'status', 'gst_no', 'city', 'state'];
 
 
     /**
@@ -51,6 +51,11 @@ class Branch extends Model
     {
         // Check if parentCategory exists and return its name
         return $this->company ? $this->company->name : '-';
+    }
+
+    public function parentBranches()
+    {
+        return $this->belongsTo(Role::class, 'role_id');
     }
         
 }

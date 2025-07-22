@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Employee;
+use App\Models\Role;
+use App\Models\Branch;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use App\Http\Requests\EmployeeRequest;
@@ -19,7 +21,7 @@ class EmployeeController extends Controller
      */
     public function index(Request $request): View
     {
-        $employees = Employee::orderBy('id', 'desc')->paginate();
+        $employees  = Employee::with('role')->orderBy('id', 'desc')->paginate();
 
         return view('employee.index', compact('employees'))
             ->with('i', ($request->input('page', 1) - 1) * $employees->perPage());
@@ -32,7 +34,17 @@ class EmployeeController extends Controller
     {
         $employee = new Employee();
 
-        return view('employee.create', compact('employee'));
+        // Get Roles
+        $roles = new Role();
+        $all_roles = Role::all();
+        $value = '';
+
+        // Get Branches
+        $branches = new Branch();
+        $all_branches = Branch::all();
+        $branch_value = '';
+
+        return view('employee.create', compact('employee', 'all_roles', 'value', 'all_branches', 'branch_value'));
     }
 
     /**
@@ -40,8 +52,14 @@ class EmployeeController extends Controller
      */
     public function store(EmployeeRequest $request): RedirectResponse
     {
-        $item = Employee::create($request->validated());
+
+        $validated = $request->validated();
+        $employeeData = collect($validated)->except('branch_ids')->toArray();
+        $item = Employee::create($employeeData);
         Log::debug($request);
+
+        // Branch ids
+        $item->branches()->sync($validated['branch_ids']);
 
         // Main image
         if ($request->hasFile('attachment')) {
@@ -78,7 +96,16 @@ class EmployeeController extends Controller
     {
         $employee = Employee::find($id);
 
-        return view('employee.edit', compact('employee'));
+        $roles = new Role();
+        $all_roles = Role::all();
+        $value = $employee->role_id;
+
+        // Get Branches
+        $branches = new Branch();
+        $all_branches = Branch::all();
+        $branch_value = $employee->branches()->pluck('branches.id')->toArray();
+        
+        return view('employee.edit', compact('employee', 'all_roles', 'value', 'all_branches', 'branch_value'));
     }
 
     /**
@@ -86,7 +113,30 @@ class EmployeeController extends Controller
      */
     public function update(EmployeeRequest $request, Employee $employee): RedirectResponse
     {
-        $employee->update($request->validated());
+        $validated = $request->validated();
+        $employeeData = collect($validated)->except('branch_ids')->toArray();
+        $employee->update($employeeData);
+        Log::debug($request);
+
+        // Branch ids
+        if($validated['branch_ids']){
+            $employee->branches()->sync($validated['branch_ids']);
+        }
+
+        // Main image
+        if ($request->hasFile('attachment')) {
+            $mainImage = $request->file('attachment');
+            $extension = $mainImage->getClientOriginalExtension(); 
+            $mainImageName = Str::random(40) . '_main.' . $extension; 
+            $mainImagePath = $mainImage->storeAs('images/users/', $mainImageName, 'public');
+
+            Log::debug('Main Image Path: ' . $mainImagePath);
+
+            Employee::find($employee->id)->update(['attachment' => $mainImageName]);
+        } else {
+            Log::debug('No main image uploaded');
+        }
+
 
         return Redirect::route('employees.index')
             ->with('success', 'Employee updated successfully');

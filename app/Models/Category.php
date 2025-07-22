@@ -56,7 +56,6 @@ class Category extends Model
         return $this->parentCategory ? $this->parentCategory->name : '-';
     }
 
-
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
@@ -76,9 +75,14 @@ class Category extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function products()
+    public function company()
     {
         return $this->hasMany(\App\Models\product::class, 'id', 'category_id');
     }
-        
+
+    public function getParentCompanyNameAttribute()
+    {
+        // Check if parentCategory exists and return its name
+        return $this->company ? $this->company->name : '-';
+    }
 }

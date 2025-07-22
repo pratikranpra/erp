@@ -29,6 +29,7 @@
                                         
 									<th scope="col" class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">Email</th>
 									<th scope="col" class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">User Pin</th>
+                                    <th scope="col" class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">User Role</th>
 									<th scope="col" class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">Department</th>
 									<th scope="col" class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">Sub Department</th>
 									<th scope="col" class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">Contact</th>
@@ -44,10 +45,11 @@
                                     <tbody class="divide-y divide-gray-200 bg-white">
                                     @foreach ($employees as $employee)
                                         <tr class="even:bg-gray-50">
-                                            <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-semibold text-gray-900">{{ ++$i }}</td>
+                                        <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-semibold text-gray-900">{{ ++$i }}</td>
                                             
 										<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $employee->email }}</td>
 										<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $employee->user_pin }}</td>
+                                        <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $employee->role?->name ?? 'N/A' }}</td>
 										<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $employee->department }}</td>
 										<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $employee->sub_department }}</td>
 										<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $employee->contact }}</td>

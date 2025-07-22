@@ -15,6 +15,22 @@
         <x-text-input id="handled_by" name="handled_by" type="text" class="mt-1 block w-full" :value="old('handled_by', $branch?->handled_by)" autocomplete="handled_by" placeholder="Handled By"/>
         <x-input-error class="mt-2" :messages="$errors->get('handled_by')"/>
     </div>
+
+    <div>
+        <x-input-label for="gst_no" :value="__('GST Number')"/>
+        <x-text-input id="gst_no" name="gst_no" type="text" class="mt-1 block w-full" :value="old('gst_no', $branch?->gst_no)" autocomplete="gst_no" placeholder="GST Number"/>
+        <x-input-error class="mt-2" :messages="$errors->get('gst_no')"/>
+    </div>
+    <div>
+        <x-input-label for="city" :value="__('City')"/>
+        <x-text-input id="city" name="city" type="text" class="mt-1 block w-full" :value="old('city', $branch?->city)" autocomplete="city" placeholder="Branch City"/>
+        <x-input-error class="mt-2" :messages="$errors->get('city')"/>
+    </div>
+    <div>
+        <x-input-label for="state" :value="__('State')"/>
+        <x-text-input id="state" name="state" type="text" class="mt-1 block w-full" :value="old('state', $branch?->state)" autocomplete="state" placeholder="Branch State"/>
+        <x-input-error class="mt-2" :messages="$errors->get('state')"/>
+    </div>
     
     {{-- <div>
         <x-input-label for="company_id" :value="__('Company Id')"/>
