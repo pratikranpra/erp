@@ -15,7 +15,7 @@ use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\employee_admin\EmployeeAdminConstroller;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\GstMasterController;
-
+use App\Http\Controllers\UnitController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -41,6 +41,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => 'auth'], fu
     Route::group(['prefix' => 'status'], function () {
         Route::post('/users', [SettingsController::class, 'status']);
         Route::post('/roles', [RoleController::class, 'status']);
+        Route::post('/units', [UnitController::class, 'status']);
         Route::post('/customers', [CustomerController::class, 'status']);
         Route::post('/vendors', [VendorController::class, 'status']);
         Route::post('/other_users', [OtherUserController::class, 'status']);
@@ -58,9 +59,9 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => 'auth'], fu
 Route::middleware('auth')->post('/change_password', [ProfileController::class, 'changePassword']);
 
 
-// Modules
 Route::middleware('auth')->resource('/admin/users', UserController::class);
 Route::middleware('auth')->resource('/admin/roles', RoleController::class);
+Route::middleware('auth')->resource('/admin/units', UnitController::class);
 Route::middleware('auth')->resource('/admin/customers', CustomerController::class);
 Route::middleware('auth')->resource('/admin/vendors', VendorController::class);
 Route::middleware('auth')->resource('/admin/other_users', OtherUserController::class);
