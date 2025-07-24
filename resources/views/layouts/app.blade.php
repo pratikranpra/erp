@@ -31,12 +31,23 @@
         <!-- ===== Preloader End ===== -->
 
         <div class="flex h-screen overflow-hidden">
-            @include('layouts.sidebar')
+            @props(['employee_data'])
+            
+            @if(Auth::guard('employee')->check())
+                @include('layouts.employee_sidebar')
+            @else
+                @include('layouts.sidebar')
+            @endif
 
             <!-- Page Content -->
             <div class="relative flex flex-col flex-1 overflow-x-hidden overflow-y-auto">
                 <!-- Header -->
-                @include('layouts.navigation')
+                @if(Auth::guard('employee')->check())
+                    @include('layouts.employee_navigation')
+                @else
+                    @include('layouts.navigation')
+                @endif
+                
 
                 <!-- Main Content -->
                 <main class="flex-1 p-8 transition-all duration-300 ease-in-out"
@@ -44,6 +55,7 @@
                       x-data="{ isOpen: true }">
                     
                     <!-- Page Heading -->
+                    
                     @isset($header)
                         <header class="bg-white shadow">
                             <div class="max-w-7xl mx-auto-- py-6 px-4 sm:px-6 lg:px-8">

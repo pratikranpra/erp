@@ -18,9 +18,9 @@ class EmployeeLoginController extends Controller
     public function login(Request $request)
     {
         $credentials = $request->only('email', 'password');
-
+        //dd($credentials);
         if (Auth::guard('employee')->attempt($credentials)) {
-            return redirect()->intended('/dashboard');
+            return redirect()->intended('/employee/dashboard');
         }
 
         return back()->withErrors([

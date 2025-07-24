@@ -1,9 +1,14 @@
-<div class="space-y-6">
+    <div class="space-y-6">
     
     <div>
         <x-input-label for="email" :value="__('Email')"/>
         <x-text-input id="email" name="email" type="text" class="mt-1 block w-full" :value="old('email', $employee?->email)" autocomplete="email" placeholder="Email"/>
         <x-input-error class="mt-2" :messages="$errors->get('email')"/>
+    </div>
+    <div class="mb-10">
+        <x-input-label for="password" :value="__('New Password*')"/>
+        <x-text-input required id="plain_password" name="plain_password" type="password"  :value="old('plain_password', $employee?->plain_password)" class="mt-1 block w-full" placeholder="Your password" />
+        <x-input-error class="mt-2" :messages="$errors->get('plain_password')"/>
     </div>
     <div>
         <x-input-label for="user_pin" :value="__('User Pin')"/>

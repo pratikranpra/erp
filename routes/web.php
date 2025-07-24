@@ -12,6 +12,7 @@ use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\BranchController;
 use App\Http\Controllers\CompanyController;
+use App\Http\Controllers\employee_admin\EmployeeAdminConstroller;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\GstMasterController;
 
@@ -77,17 +78,23 @@ Route::get('/emp_login', [App\Http\Controllers\Auth\EmployeeLoginController::cla
 Route::post('/emp_login', [App\Http\Controllers\Auth\EmployeeLoginController::class, 'login'])->name('employee.login');
 Route::post('/employee/logout', [App\Http\Controllers\Auth\EmployeeLoginController::class, 'logout'])->name('employee.logout');
 
-Route::middleware(['auth:employee'])->group(function () {
-    Route::get('/employee/dashboard', function () {
-        return 'Welcome, employee!';
-    });
-});
+// Route::middleware(['auth:employee'])->group(function () {
+//     Route::get('/employee/dashboard', function () {
+//         return 'Welcome, employee!';
+//     });
+// });
 
 // Employee routes
-Route::middleware(['auth:employee'])->group(function () {
-    Route::get('/employee/dashboard', function () {
-        return view('employee.dashboard'); // Or whatever view you want
-    })->name('employee.dashboard');
+Route::prefix('employee')->group(function () {
+    Route::middleware(['auth:employee'])->group(function () {
+        // Route::get('/dashboard', function () {
+        //     return view('employee_admin.dashboard'); // Or whatever view you want
+        // })->name('employee.dashboard');
+
+        Route::get('/dashboard', [EmployeeAdminConstroller::class, 'index'])->name('employee.dashboard');
+        Route::get('/change-password', [EmployeeAdminConstroller::class, 'getChangePassword'])->name('employee.change.password');
+        Route::post('/change-password', [EmployeeAdminConstroller::class, 'postChangePassword'])->name('post:employee.change.password');
+    });
 });
 
 

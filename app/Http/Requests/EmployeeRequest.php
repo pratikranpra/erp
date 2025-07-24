@@ -32,6 +32,7 @@ class EmployeeRequest extends FormRequest
 			'aadhar_name' => 'required|string',
             'role_id' => 'required',
             'branch_ids' => 'required',
+            'plain_password' => 'required|min:6',
         ];
     }
 }

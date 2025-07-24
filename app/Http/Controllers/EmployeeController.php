@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+use Hash; 
 
 use App\Models\Employee;
 use App\Models\Role;
@@ -55,6 +56,7 @@ class EmployeeController extends Controller
 
         $validated = $request->validated();
         $employeeData = collect($validated)->except('branch_ids')->toArray();
+        
         $item = Employee::create($employeeData);
         Log::debug($request);
 
@@ -115,14 +117,15 @@ class EmployeeController extends Controller
     {
         $validated = $request->validated();
         $employeeData = collect($validated)->except('branch_ids')->toArray();
+        $new_password = Hash::make($request->plain_password);   
+        
         $employee->update($employeeData);
-        Log::debug($request);
-
+        
         // Branch ids
         if($validated['branch_ids']){
             $employee->branches()->sync($validated['branch_ids']);
         }
-
+        Employee::find($employee->id)->update(['password' => $new_password]);    
         // Main image
         if ($request->hasFile('attachment')) {
             $mainImage = $request->file('attachment');

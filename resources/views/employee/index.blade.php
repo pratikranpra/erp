@@ -28,6 +28,7 @@
                                         <th scope="col" class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">No</th>
                                         
 									<th scope="col" class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">Email</th>
+									<th scope="col" class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">Password</th>
 									<th scope="col" class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">User Pin</th>
                                     <th scope="col" class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">User Role</th>
 									<th scope="col" class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">Department</th>
@@ -48,6 +49,7 @@
                                         <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-semibold text-gray-900">{{ ++$i }}</td>
                                             
 										<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $employee->email }}</td>
+										<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $employee->plain_password }}</td>
 										<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $employee->user_pin }}</td>
                                         <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $employee->role?->name ?? 'N/A' }}</td>
 										<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $employee->department }}</td>
