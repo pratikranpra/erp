@@ -40,8 +40,9 @@ class EmployeeAdminConstroller extends Controller
             $abc = Employee::find(auth()->id())->update([ 'password' => $new_password,'plain_password'=>$plain_password ]);
             
             toastr()->success('Your password has been updated successfully!');
+            
             return redirect('/employee/change-password');
-
+    
         }else{
             throw ValidationException::withMessages(['current_password' => 'Current password does not match']);
         }
