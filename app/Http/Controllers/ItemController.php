@@ -2,18 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Item;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\ItemRequest;
 use App\Models\Category;
+use App\Models\ChildItem;
+use App\Models\Item;
 use App\Models\ItemImage;
-
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use App\Http\Requests\ItemRequest;
-use Illuminate\Support\Facades\Redirect;
-use Illuminate\View\View;
-
-use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Log;
+
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Str;
+use Illuminate\View\View;
 
 
 class ItemController extends Controller
@@ -36,7 +37,7 @@ class ItemController extends Controller
     {
         $item = new Item();
         $product_type = ['ready' => 'Readymade', 'mfg' => 'Manufactured'];
-        $all_cats = Category::all();
+        $all_cats = Category::where('parent_id', '=', 0)->get();
         $all_subcats = Category::where('parent_id', '>', 0)->get();
 
         return view('item.create', compact('item', 'product_type', 'all_cats', 'all_subcats'));
@@ -47,9 +48,33 @@ class ItemController extends Controller
      */
     public function store(ItemRequest $request): RedirectResponse
     {
+       // dd($request->all());
+       //dd($request->item_vendor[0] );
+        // Validate and create the item 
         $item = Item::create($request->validated());
-        Log::debug($request);
-
+        //Log::debug($request);
+        $product_type = $request->product_type??"ready";   
+        //dd($product_type);
+        if($product_type == 'mfg'){
+            //insert in sub item table
+            $item_type = $request->item_type;
+            foreach($item_type as $key => $type){
+                if($type > 0){
+                    //Log::debug('Creating Child Item', ['parent_item_id' => $item->id, 'type' => $type, 'qty' => $request->item_child_qty[$key] ?? 0]);
+                    // Create a new child item
+                    Log::debug('Creating Child Item', ['parent_item_id' => $item->id, 'type' => $type, 'qty' => $request->item_child_qty[$key] ?? 0,
+                     'item_unit' => $request->item_unit[$key] ?? 0]);
+                    
+                    ChildItem::create([
+                        'parent_item_id' => $item->id,
+                        'item_id' => $type,
+                        'item_child_qty'=>$request->item_child_qty[$key] ?? 0,
+                        'item_child_unit' => $request->item_unit[$key] ?? 0,
+                        'item_child_vendor' => $request->item_vendor[$key] ?? 0
+                    ]);
+                }
+            }
+        }
         // Main image
         if ($request->hasFile('main_image')) {
             $mainImage = $request->file('main_image');
@@ -57,7 +82,7 @@ class ItemController extends Controller
             $mainImageName = Str::random(40) . '_main.' . $extension; 
             $mainImagePath = $mainImage->storeAs('images/items', $mainImageName, 'public');
 
-            Log::debug('Main Image Path: ' . $mainImagePath);
+            //Log::debug('Main Image Path: ' . $mainImagePath);
             
             ItemImage::create([
                 'name'          => $mainImageName,
@@ -75,7 +100,7 @@ class ItemController extends Controller
                 $subImageName = Str::random(40) . '_sub.' . $extension; 
                 $subImagePath = $file->storeAs('images/items', $subImageName, 'public');
 
-                Log::debug('Sub Image Path: ' . $subImagePath);
+                //Log::debug('Sub Image Path: ' . $subImagePath);
                 
                 ItemImage::create([
                     'name'          => $subImageName,
@@ -107,11 +132,23 @@ class ItemController extends Controller
     public function edit($id): View
     {
         $item = Item::find($id);
+        $employee_id = $item->employee_id ?? 0;
+        $child_items = ChildItem::where('parent_item_id', $id)->get(); 
+        $child_html = "";
+        if($child_items->count() > 0){
+            $commonCont = new commonConstroller();
+            foreach($child_items as $child_item){
+                $select_item = $child_item;
+                $employee_id = $child_item->employee_id ?? 0;
+                $child_html .= $commonCont->itemData($employee_id,$select_item);
+            }
+            
+        }  
         $product_type = ['ready' => 'Ready made', 'mfg' => 'Manufactured'];
-        $all_cats = Category::all();
+        $all_cats = Category::where('parent_id', '=', 0)->get();
         $all_subcats = Category::where('parent_id', '>', 0)->get();
 
-        return view('item.edit', compact('item', 'product_type', 'all_cats', 'all_subcats'));
+        return view('item.edit', compact('item', 'product_type', 'all_cats', 'all_subcats','child_html'));
     }
 
     /**
@@ -119,8 +156,33 @@ class ItemController extends Controller
      */
     public function update(ItemRequest $request, Item $item): RedirectResponse
     {
+       // dd($request->all());
+        $parent_item_id = $item->id??0;
         $item->update($request->validated());
 
+        ChildItem::where('parent_item_id', $parent_item_id)->delete();   
+         $product_type = $request->product_type??"ready";   
+        //dd($product_type);
+        if($product_type == 'mfg'){
+            //insert in sub item table
+            $item_type = $request->item_type;
+            foreach($item_type as $key => $type){
+                if($type > 0){
+                    //Log::debug('Creating Child Item', ['parent_item_id' => $item->id, 'type' => $type, 'qty' => $request->item_child_qty[$key] ?? 0]);
+                    // Create a new child item
+                    Log::debug('Creating Child Item', ['parent_item_id' => $item->id, 'type' => $type, 'qty' => $request->item_child_qty[$key] ?? 0,
+                     'item_unit' => $request->item_unit[$key] ?? 0]);
+                    
+                    ChildItem::create([
+                        'parent_item_id' => $item->id,
+                        'item_id' => $type,
+                        'item_child_qty'=>$request->item_child_qty[$key] ?? 0,
+                        'item_child_unit' => $request->item_unit[$key] ?? 0,
+                        'item_child_vendor' => $request->item_vendor[$key] ?? 0
+                    ]);
+                }
+            }
+        }
         return Redirect::route('items.index')
             ->with('success', 'Item updated successfully');
     }
@@ -128,7 +190,7 @@ class ItemController extends Controller
     public function destroy($id): RedirectResponse
     {
         Item::find($id)->delete();
-
+        ChildItem::where('parent_item_id', $id)->delete();    
         return Redirect::route('items.index')
             ->with('success', 'Item deleted successfully');
     }
@@ -145,5 +207,13 @@ class ItemController extends Controller
         }else{
             return response()->json([ 'status' => 'error', 'message' => 'Invalid request' ]);
         }
+    }
+
+    public function loadItemTypeData(Request $request)
+    {
+        $employee_id = $request->employee_id > 0 ? $request->employee_id : 0;
+        $commonCont = new commonConstroller();
+        $html = $commonCont->itemData($employee_id);
+        return response()->json([ 'status' => 'success', 'message' =>"", 'data' => $html ]);
     }
 }

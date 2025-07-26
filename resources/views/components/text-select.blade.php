@@ -9,7 +9,7 @@ $selectedValues = $multiple
 <div>
     <label for="{{ $name }}">{{ $label }}</label>
     <select {{ $multiple ? 'multiple' : '' }} name="{{ $multiple ? $name . '[]' : $name }}" id="{{ $name }}"
-        class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm form-control">
+        class="w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm form-control">
         <option value="0">Select an Option</option>
 
         @foreach($options as $option)

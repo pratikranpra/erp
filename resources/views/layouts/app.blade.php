@@ -81,7 +81,9 @@
         @endif
     </script>
 
-
+    <script>
+        window.BASE_URL = "{{ url('/') }}";
+    </script>
     
     {{-- Additional footer scripts --}}
     <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" rel="stylesheet">

@@ -53,6 +53,10 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => 'auth'], fu
         Route::post('/gst-masters', [GstMasterController::class, 'status']);
 
     });
+
+    Route::group(['prefix' => 'items'], function () {
+        Route::post('/load-item-type-data', [ItemController::class, 'loadItemTypeData'])->name('load.item.type.data');
+    });
     
 });
 
@@ -95,6 +99,8 @@ Route::prefix('employee')->group(function () {
         Route::get('/dashboard', [EmployeeAdminConstroller::class, 'index'])->name('employee.dashboard');
         Route::get('/change-password', [EmployeeAdminConstroller::class, 'getChangePassword'])->name('employee.change.password');
         Route::post('/change-password', [EmployeeAdminConstroller::class, 'postChangePassword'])->name('post:employee.change.password');
+
+        
     });
 });
 

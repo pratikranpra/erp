@@ -25,8 +25,8 @@ class ItemRequest extends FormRequest
 			'sku' => 'required|string',
 			'name' => 'required|string',
 			'description' => 'required|string',
-			'category_id' => 'string',
-			'subcategory_id' => 'string',
+			'category_id' => 'required|numeric|not_in:0',
+			'subcategory_id' => 'required|numeric|not_in:0',
 			'unit' => 'required',
 			'weight' => 'required|string',
 			'gst' => 'required|string',
@@ -35,7 +35,7 @@ class ItemRequest extends FormRequest
             'sub_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:4096',
 			'discount' => 'required',
 			'child_qty' => 'required',
-			'product_type' => 'string',
+			'product_type' => 'required|string',
         ];
     }
 }
