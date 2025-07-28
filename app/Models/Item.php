@@ -39,7 +39,7 @@ class Item extends Model
      *
      * @var array<int, string>
      */
-    protected $fillable = ['sku', 'name', 'description', 'category_id', 'subcategory_id', 'unit', 'weight', 'gst', 'rate', 'discount', 'child_qty', 'product_type', 'status'];
+    protected $fillable = ['sku', 'name', 'description','employee_id','category_id', 'subcategory_id', 'unit', 'weight', 'gst', 'rate', 'discount', 'child_qty', 'product_type','estimate_delivery_days', 'status'];
 
 
     /**
@@ -73,6 +73,10 @@ class Item extends Model
     public function imageDetails()
     {
         return $this->hasMany(\App\Models\ItemImage::class, 'items_id', 'id');
+    }
+    public function childItem()
+    {
+        return $this->hasMany(\App\Models\ChildItem::class, 'parent_item_id', 'id');
     }
 
     public function getImages()

@@ -71,6 +71,7 @@
 
                                             <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900">
                                                 <form action="{{ route('customers.destroy', $customer->id) }}" method="POST">
+                                                    <a href="{{ route('admin.customer-shipping-addresses.index', $customer->id) }}" target="_blank" class="bg-[#007bff] hover:bg-gray-100 text-white p-2">{{ __('Manage Address') }}</a>
                                                     <a href="{{ route('customers.show', $customer->id) }}" class="bg-[#218838] hover:bg-gray-100 text-white p-2">{{ __('Show') }}</a>
                                                     <a href="{{ route('customers.edit', $customer->id) }}" class="bg-[#007bff] hover:bg-gray-100 text-white p-2">{{ __('Edit') }}</a>
                                                     @csrf

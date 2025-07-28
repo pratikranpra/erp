@@ -45,13 +45,14 @@
     </div>
     <div>
         <x-input-label for="product_type" :value="__('Product Type')"/>
-        <select id="product_type" name="product_type" data-employee-id="0" :value="old('product_type', $item?->product_type)"  data-id="{{ $item->id }}" data-module="items" class="w-full product_type mt-4 border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm" label="">
+        <select id="product_type" name="product_type" data-employee-id="{{ $employee_id }}" :value="old('product_type', $item?->product_type)"  data-id="{{ $item->id }}" data-module="items" class="w-full product_type mt-4 border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm" label="">
             <option value="">Select Product Type</option>
             @foreach($product_type as $key => $p_type)
                 <option value="{{ $key }}" {{  $item->product_type == $key ?"selected":"" }}>{{ $p_type }}</option>
             @endforeach
         </select>
         <x-input-error class="mt-2" :messages="$errors->get('product_type')"/>
+        <input type="hidden" name="employee_id" value="{{ $employee_id }}">
     </div>
     <div id="product-type-wrapper">
         <div class="product_type_data_item">
@@ -104,7 +105,7 @@
 
         <!-- <button type="button" id="add-product-type" class="mt-4 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">
             + Add More -->
-        <button type="button" id="add-product-type" data-employee-id="0" class="" style="{{ $item->product_type != 'mfg' ? 'display: none;' : '' }}">
+        <button type="button" id="add-product-type" data-employee-id="{{ $employee_id }}" class="" style="{{ $item->product_type != 'mfg' ? 'display: none;' : '' }}">
             + Add More
         </button>
     </div>
@@ -138,6 +139,11 @@
         <x-input-label for="child_qty" :value="__('Child Qty')"/>
         <x-text-input id="child_qty" name="child_qty" type="number" class="mt-1 block w-full" :value="old('child_qty', $item?->child_qty)" autocomplete="child_qty" placeholder="Child Qty"/>
         <x-input-error class="mt-2" :messages="$errors->get('child_qty')"/>
+    </div>
+    <div>
+        <x-input-label for="estimate_delivery_days" :value="__('Estimate Delivery Days')"/>
+        <x-text-input id="estimate_delivery_days" name="estimate_delivery_days" type="number" class="mt-1 block w-full" :value="old('estimate_delivery_days', $item?->estimate_delivery_days)" autocomplete="estimate_delivery_days" placeholder="Child Qty"/>
+        <x-input-error class="mt-2" :messages="$errors->get('estimate_delivery_days')"/>
     </div>
     <div class="flex items-center gap-4">
         <x-primary-button>Submit</x-primary-button>

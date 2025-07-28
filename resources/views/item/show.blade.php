@@ -15,7 +15,7 @@
                             <p class="mt-2 text-sm text-gray-700">Details of {{ __('Item') }}.</p>
                         </div>
                         <div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
-                            <a type="button" href="{{ route('items.index') }}" class="block rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Back</a>
+                            <a type="button" href="{{ (Auth::guard('employee')->check())? route('employee.items.index'): route('items.index') }}" class="block rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Back</a>
                         </div>
                     </div>
 
@@ -74,6 +74,35 @@
                                     <dt class="text-sm font-medium leading-6 text-gray-900">Subcategory Id</dt>
                                     <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{{ $item->subcategory_id }}</dd>
                                 </div>
+                                @if($child_items->isNotEmpty())
+                                <div class="px-4 py-6 sm:px-0">
+                                    <div class="overflow-x-auto">
+                                        <table class="min-w-full divide-y divide-gray-200 border border-gray-300 text-sm text-gray-700">
+                                            <thead class="bg-gray-100">
+                                                <tr>
+                                                    <th class="px-4 py-2 text-left font-semibold text-gray-900">ID</th>
+                                                    <th class="px-4 py-2 text-left font-semibold text-gray-900">Item Name</th>
+                                                    <th class="px-4 py-2 text-left font-semibold text-gray-900">Quantity</th>
+                                                    <th class="px-4 py-2 text-left font-semibold text-gray-900">Unit</th>
+                                                    <th class="px-4 py-2 text-left font-semibold text-gray-900">Vendor Name</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody class="bg-white divide-y divide-gray-100">
+                                                @foreach ($child_items  as $key=>$single_child_item) 
+                                                  <tr>
+                                                    <td class="px-4 py-2">{{  $key + 1 }}</td>
+                                                    <td class="px-4 py-2">{{ ucfirst($single_child_item->item_name) }}</td>
+                                                    <td class="px-4 py-2">{{ $single_child_item->item_child_qty }}</td>
+                                                    <td class="px-4 py-2">{{ ucfirst($single_child_item->unit_name) }}</td>
+                                                    <td class="px-4 py-2">{{ ucfirst($single_child_item->vendor_name) }}</td>
+                                                </tr>  
+                                                @endforeach
+                                                
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                @endif
                                 <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                                     <dt class="text-sm font-medium leading-6 text-gray-900">Unit</dt>
                                     <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{{ $item->unit }}</dd>
@@ -100,11 +129,11 @@
                                 </div>
                                 <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                                     <dt class="text-sm font-medium leading-6 text-gray-900">Product Type</dt>
-                                    <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{{ $item->product_type }}</dd>
+                                    <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{{ ($item->product_type=="mfg")?"Manufacture":"Ready Made" }}</dd>
                                 </div>
                                 <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                                     <dt class="text-sm font-medium leading-6 text-gray-900">Status</dt>
-                                    <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{{ $item->status }}</dd>
+                                    <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{{ ucfirst($item->status) }}</dd>
                                 </div>
 
                                     </dl>

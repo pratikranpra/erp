@@ -24,8 +24,13 @@ class ItemController extends Controller
      */
     public function index(Request $request): View
     {
-        $items = Item::with('imageDetails')->orderBy('id', 'desc')->paginate();
-
+        $employee_id = employee_id();
+        if($employee_id > 0){
+            $items = Item::with('imageDetails')->where('employee_id','=',$employee_id)->orderBy('id', 'desc')->paginate();
+        }else{
+            // For admin or other users, show all items
+            $items = Item::with('imageDetails')->orderBy('id', 'desc')->paginate();
+        }
         return view('item.index', compact('items'))
             ->with('i', ($request->input('page', 1) - 1) * $items->perPage());
     }
@@ -39,8 +44,9 @@ class ItemController extends Controller
         $product_type = ['ready' => 'Readymade', 'mfg' => 'Manufactured'];
         $all_cats = Category::where('parent_id', '=', 0)->get();
         $all_subcats = Category::where('parent_id', '>', 0)->get();
-
-        return view('item.create', compact('item', 'product_type', 'all_cats', 'all_subcats'));
+        $child_html = "";
+        $employee_id = employee_id();
+        return view('item.create', compact('item', 'product_type', 'all_cats', 'all_subcats','employee_id','child_html'));
     }
 
     /**
@@ -48,8 +54,6 @@ class ItemController extends Controller
      */
     public function store(ItemRequest $request): RedirectResponse
     {
-       // dd($request->all());
-       //dd($request->item_vendor[0] );
         // Validate and create the item 
         $item = Item::create($request->validated());
         //Log::debug($request);
@@ -72,6 +76,14 @@ class ItemController extends Controller
                         'item_child_unit' => $request->item_unit[$key] ?? 0,
                         'item_child_vendor' => $request->item_vendor[$key] ?? 0
                     ]);
+
+                    //code for deduct child_qty from parent item
+                    $get_parent_item = Item::find($type);
+                    if($get_parent_item){
+                        $get_parent_item->child_qty = $get_parent_item->child_qty - ($request->item_child_qty[$key] ?? 0);
+                        $get_parent_item->save();
+                      //  Log::debug('Child quantity deducted from parent item', ['item_id' => $get_parent_item->id, 'new_child_qty' => $get_parent_item->child_qty]);
+                    } 
                 }
             }
         }
@@ -112,7 +124,9 @@ class ItemController extends Controller
             Log::debug('No sub images uploaded');
         }
 
-        return Redirect::route('items.index')
+        $employee_id = employee_id();
+        $path = $employee_id > 0 ? 'employee.items.index' : 'items.index';
+        return Redirect::route($path)
             ->with('success', 'Item created successfully.');
     }
 
@@ -121,9 +135,17 @@ class ItemController extends Controller
      */
     public function show($id): View
     {
+        $employee_id = employee_id();
         $item = Item::with('imageDetails')->find($id);
-
-        return view('item.show', compact('item'));
+        $child_items = ChildItem::where('parent_item_id', $id)
+                        ->join('items', 'child_items.item_id', '=', 'items.id')
+                        ->join('vendors', 'child_items.item_child_vendor', '=', 'vendors.id')   
+                        ->join('units', 'child_items.item_child_unit', '=', 'units.id')
+                        ->select('child_items.*', 'items.name as item_name', 
+                                 'vendors.name as vendor_name', 
+                                 'units.name as unit_name')
+                        ->get();
+        return view('item.show', compact('item','employee_id','child_items'));
     }
 
     /**
@@ -139,7 +161,7 @@ class ItemController extends Controller
             $commonCont = new commonConstroller();
             foreach($child_items as $child_item){
                 $select_item = $child_item;
-                $employee_id = $child_item->employee_id ?? 0;
+                //$employee_id = $child_item->employee_id ?? 0;
                 $child_html .= $commonCont->itemData($employee_id,$select_item);
             }
             
@@ -148,7 +170,7 @@ class ItemController extends Controller
         $all_cats = Category::where('parent_id', '=', 0)->get();
         $all_subcats = Category::where('parent_id', '>', 0)->get();
 
-        return view('item.edit', compact('item', 'product_type', 'all_cats', 'all_subcats','child_html'));
+        return view('item.edit', compact('item', 'product_type', 'all_cats', 'all_subcats','employee_id','child_html'));
     }
 
     /**
@@ -156,12 +178,12 @@ class ItemController extends Controller
      */
     public function update(ItemRequest $request, Item $item): RedirectResponse
     {
-       // dd($request->all());
         $parent_item_id = $item->id??0;
+        
         $item->update($request->validated());
 
         ChildItem::where('parent_item_id', $parent_item_id)->delete();   
-         $product_type = $request->product_type??"ready";   
+        $product_type = $request->product_type??"ready";   
         //dd($product_type);
         if($product_type == 'mfg'){
             //insert in sub item table
@@ -172,7 +194,8 @@ class ItemController extends Controller
                     // Create a new child item
                     Log::debug('Creating Child Item', ['parent_item_id' => $item->id, 'type' => $type, 'qty' => $request->item_child_qty[$key] ?? 0,
                      'item_unit' => $request->item_unit[$key] ?? 0]);
-                    
+                    Log::info("message", ['parent_item_id' => $item->id, 'type' => $type, 'qty' => $request->item_child_qty[$key] ?? 0,
+                     'item_unit' => $request->item_unit[$key] ?? 0]);
                     ChildItem::create([
                         'parent_item_id' => $item->id,
                         'item_id' => $type,
@@ -183,7 +206,10 @@ class ItemController extends Controller
                 }
             }
         }
-        return Redirect::route('items.index')
+        
+        $employee_id = employee_id();
+        $path = $employee_id > 0 ?'employee.items.index' :'items.index';
+        return Redirect::route($path)
             ->with('success', 'Item updated successfully');
     }
 
@@ -191,7 +217,9 @@ class ItemController extends Controller
     {
         Item::find($id)->delete();
         ChildItem::where('parent_item_id', $id)->delete();    
-        return Redirect::route('items.index')
+        $employee_id = employee_id();
+        $path = $employee_id > 0 ? 'employee.items.index' : 'items.index';
+        return Redirect::route($path)
             ->with('success', 'Item deleted successfully');
     }
 

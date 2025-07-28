@@ -1,4 +1,8 @@
 $(document).ready(function () {
+	const BASE_URL = window.location.origin;
+	const pathSegments = window.location.pathname.split('/');
+	const guardPrefix = pathSegments[1]; // 'admin' or 'employee'
+
 
 	$('.status_toggle').on('change', function () {
 		var _this = $(this)
@@ -33,15 +37,15 @@ $(document).ready(function () {
 		var module_nm = $(this).attr('data-module')
 		var employee_id = $(this).attr('data-employee-id')
 		var product_type = _this.val()
-		alert(module_nm + employee_id + product_type);	
+		
 		if (module_nm != '' && product_type == 'mfg') {
 			$.ajax({
-				url: `${BASE_URL}/admin/items/load-item-type-data`,
+				url: `${BASE_URL}/${guardPrefix}/items/load-item-type-data`,
 				type: 'POST',
 				data: { employee_id: employee_id, _token: $('meta[name="csrf-token"]').attr('content') },
 				success: function (response) {
 					//toastr.success(response.message);
-					alert(response.data);
+		//			alert(response.data);
 					$(".product_type_data_item").html(response.data);
 					$("#add-product-type").show();
 				},
@@ -59,7 +63,7 @@ $(document).ready(function () {
 		var employee_id = $(this).attr('data-employee-id')
 		$.ajax({
 				//url: 'load-item-type-data/',
-				url: `${BASE_URL}/admin/items/load-item-type-data`,
+				url: `${BASE_URL}/${guardPrefix}/items/load-item-type-data`,
 				type: 'POST',
 				data: { employee_id: employee_id, _token: $('meta[name="csrf-token"]').attr('content') },
 				success: function (response) {

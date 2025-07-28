@@ -12,10 +12,13 @@ use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\BranchController;
 use App\Http\Controllers\CompanyController;
+use App\Http\Controllers\CustomerShippingAddressController;
 use App\Http\Controllers\employee_admin\EmployeeAdminConstroller;
+use App\Http\Controllers\EmployeeAdminItemConstroller;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\GstMasterController;
 use App\Http\Controllers\UnitController;
+use App\Models\CustomerShippingAddress;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -57,6 +60,18 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => 'auth'], fu
     Route::group(['prefix' => 'items'], function () {
         Route::post('/load-item-type-data', [ItemController::class, 'loadItemTypeData'])->name('load.item.type.data');
     });
+
+    Route::group([
+        'prefix' => 'customers/{customer_id}',
+        'as' => 'customer-shipping-addresses.',
+    ], function () {
+        Route::get('customer-shipping-addresses', [CustomerShippingAddressController::class, 'index'])->name('index');
+        Route::get('customer-shipping-addresses/create', [CustomerShippingAddressController::class, 'create'])->name('create');
+        Route::post('customer-shipping-addresses', [CustomerShippingAddressController::class, 'store'])->name('store');
+        Route::get('customer-shipping-addresses/{address}/edit', [CustomerShippingAddressController::class, 'edit'])->name('edit');
+        Route::patch('customer-shipping-addresses/{address}', [CustomerShippingAddressController::class, 'update'])->name('update');
+        Route::delete('customer-shipping-addresses/{address}', [CustomerShippingAddressController::class, 'destroy'])->name('destroy');
+    });
     
 });
 
@@ -66,6 +81,11 @@ Route::middleware('auth')->post('/change_password', [ProfileController::class, '
 Route::middleware('auth')->resource('/admin/users', UserController::class);
 Route::middleware('auth')->resource('/admin/roles', RoleController::class);
 Route::middleware('auth')->resource('/admin/units', UnitController::class);
+
+// Route::get('/admin/customer-shipping-addresses/{customer}', [CustomerShippingAddressController::class, 'index'])->name('customer-shipping-address.index');
+// Route::get('/admin/customer-shipping-addresses/create/{customer}', [CustomerShippingAddressController::class, 'create'])->name('customer-shipping-address.create');
+// Route::middleware('auth')->resource('/admin/customer-shipping-addresses', CustomerShippingAddressController::class);
+
 Route::middleware('auth')->resource('/admin/customers', CustomerController::class);
 Route::middleware('auth')->resource('/admin/vendors', VendorController::class);
 Route::middleware('auth')->resource('/admin/other_users', OtherUserController::class);
@@ -76,6 +96,7 @@ Route::middleware('auth')->resource('/admin/companies', CompanyController::class
 Route::middleware('auth')->resource('/admin/branches', BranchController::class);
 Route::middleware('auth')->resource('/admin/items', ItemController::class);
 Route::middleware('auth')->resource('/admin/gst-masters', GstMasterController::class);
+
 
 
 // Employee Login
@@ -100,10 +121,22 @@ Route::prefix('employee')->group(function () {
         Route::get('/change-password', [EmployeeAdminConstroller::class, 'getChangePassword'])->name('employee.change.password');
         Route::post('/change-password', [EmployeeAdminConstroller::class, 'postChangePassword'])->name('post:employee.change.password');
 
+        //code for route for employee item add
+        Route::get('/items', [ItemController::class, 'index'])->name('employee.items.index');
+        Route::post('/status/items', [ItemController::class, 'status'])->name('employee.items.status');
+        
+        Route::group(['prefix' => 'items'], function () {
+            Route::get('/create', [ItemController::class, 'create'])->name('employee.items.create');
+            Route::post('/store', [ItemController::class, 'store'])->name('employee.items.store');
+            Route::get('/show/{id}', [ItemController::class, 'show'])->name('employee.items.show');    
+            Route::get('/{id}/edit', [ItemController::class, 'edit'])->name('employee.items.edit');
+            //Route::patch('/{id}/update', [ItemController::class, 'update'])->name('employee.items.update');
+            Route::patch('/{item}/update', [ItemController::class, 'update'])->name('employee.items.update');
+            Route::delete('/{id}/destroy', [ItemController::class, 'destroy'])->name('employee.items.destroy');
+            Route::post('/load-item-type-data', [ItemController::class, 'loadItemTypeData'])->name('employee.load.item.type.data');
+        });
         
     });
 });
-
-
 
 require __DIR__.'/auth.php';

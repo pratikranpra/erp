@@ -24,6 +24,7 @@ class ItemRequest extends FormRequest
         return [
 			'sku' => 'required|string',
 			'name' => 'required|string',
+			'employee_id' => 'required',
 			'description' => 'required|string',
 			'category_id' => 'required|numeric|not_in:0',
 			'subcategory_id' => 'required|numeric|not_in:0',
@@ -36,6 +37,7 @@ class ItemRequest extends FormRequest
 			'discount' => 'required',
 			'child_qty' => 'required',
 			'product_type' => 'required|string',
+			'estimate_delivery_days' => 'required|numeric',
         ];
     }
 }

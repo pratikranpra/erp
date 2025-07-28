@@ -15,7 +15,7 @@
                             <p class="mt-2 text-sm text-gray-700">A list of all the {{ __('Items') }}.</p>
                         </div>
                         <div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
-                            <a type="button" href="{{ route('items.create') }}" class="block rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Add new</a>
+                            <a type="button" href="{{ (Auth::guard('employee')->check())? route('employee.items.create'):route('items.create') }}" class="block rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Add new</a>
                         </div>
                     </div>
 
@@ -66,7 +66,7 @@
 										<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $item->rate }}</td>
 										<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $item->discount }}</td>
 										<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $item->child_qty }}</td>
-										<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $item->product_type }}</td>
+										<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ ($item->product_type=="mfg")?"Manufacture":"Ready Made"  }}</td>
 										<td>
                                             <label class="inline-flex items-center cursor-pointer">
                                               <input data-id="{{ $item->id }}" data-module="items" type="checkbox" value="active" class="sr-only status_toggle peer" {{ $item->status == 'active' ? 'checked' : '' }}>
@@ -75,12 +75,12 @@
                                         </td>
 
                                             <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900">
-                                                <form action="{{ route('items.destroy', $item->id) }}" method="POST">
-                                                    <a href="{{ route('items.show', $item->id) }}" class="text-gray-600 font-bold hover:text-gray-900 mr-2">{{ __('Show') }}</a>
-                                                    <a href="{{ route('items.edit', $item->id) }}" class="text-indigo-600 font-bold hover:text-indigo-900  mr-2">{{ __('Edit') }}</a>
+                                                <form action="{{ (Auth::guard('employee')->check())? route('employee.items.destroy', $item->id):route('items.destroy', $item->id) }}" method="POST">
+                                                    <a href="{{(Auth::guard('employee')->check())? route('employee.items.show', $item->id): route('items.show', $item->id) }}" class="text-gray-600 font-bold hover:text-gray-900 mr-2">{{ __('Show') }}</a>
+                                                    <a href="{{ (Auth::guard('employee')->check())? route('employee.items.edit', $item->id):route('items.edit', $item->id) }}" class="text-indigo-600 font-bold hover:text-indigo-900  mr-2">{{ __('Edit') }}</a>
                                                     @csrf
                                                     @method('DELETE')
-                                                    <a href="{{ route('items.destroy', $item->id) }}" class="text-red-600 font-bold hover:text-red-900" onclick="event.preventDefault(); confirm('Are you sure to delete?') ? this.closest('form').submit() : false;">{{ __('Delete') }}</a>
+                                                    <a href="{{ (Auth::guard('employee')->check())? route('employee.items.destroy', $item->id):route('items.destroy', $item->id) }}" class="text-red-600 font-bold hover:text-red-900" onclick="event.preventDefault(); confirm('Are you sure to delete?') ? this.closest('form').submit() : false;">{{ __('Delete') }}</a>
                                                 </form>
                                             </td>
                                         </tr>
