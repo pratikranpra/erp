@@ -1,25 +1,29 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\UserController;
-use App\Http\Controllers\RoleController;
-use App\Http\Controllers\CustomerController;
-use App\Http\Controllers\SettingsController;
-use App\Http\Controllers\VendorController;
-use App\Http\Controllers\OtherUserController;
-use App\Http\Controllers\EmployeeController;
-
-use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\Auth\EmployeeLoginController;
 use App\Http\Controllers\BranchController;
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CompanyController;
+use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\CustomerShippingAddressController;
 use App\Http\Controllers\employee_admin\EmployeeAdminConstroller;
 use App\Http\Controllers\EmployeeAdminItemConstroller;
-use App\Http\Controllers\ItemController;
+
+use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\GstMasterController;
+use App\Http\Controllers\ItemController;
+use App\Http\Controllers\ManageOrderController;
+use App\Http\Controllers\OtherUserController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\RoleController;
+use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\UnitController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\VendorController;
 use App\Models\CustomerShippingAddress;
 use Illuminate\Support\Facades\Route;
+
+
 
 Route::get('/', function () {
     return view('welcome');
@@ -59,10 +63,16 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => 'auth'], fu
 
     Route::group(['prefix' => 'items'], function () {
         Route::post('/load-item-type-data', [ItemController::class, 'loadItemTypeData'])->name('load.item.type.data');
+        Route::get('/download-pdf', [ItemController::class, 'downloadPDF'])->name('items.download.pdf');
     });
 
+    Route::group(['prefix' => 'manage-orders'], function () {
+        Route::post('/customer-billing-address', [ManageOrderController::class, 'customerBillingAddress'])->name('customer.billing.address');
+        Route::post('/load-more-item-data', [ManageOrderController::class, 'loadMoreItemData'])->name('load.more.item.data');
+    }); 
+
     Route::group([
-        'prefix' => 'customers/{customer_id}',
+        'prefix' => 'customers/{customer_id}', 
         'as' => 'customer-shipping-addresses.',
     ], function () {
         Route::get('customer-shipping-addresses', [CustomerShippingAddressController::class, 'index'])->name('index');
@@ -95,6 +105,7 @@ Route::middleware('auth')->resource('/admin/categories', CategoryController::cla
 Route::middleware('auth')->resource('/admin/companies', CompanyController::class);
 Route::middleware('auth')->resource('/admin/branches', BranchController::class);
 Route::middleware('auth')->resource('/admin/items', ItemController::class);
+Route::middleware('auth')->resource('/admin/manage-orders', ManageOrderController::class);
 Route::middleware('auth')->resource('/admin/gst-masters', GstMasterController::class);
 
 
@@ -124,18 +135,31 @@ Route::prefix('employee')->group(function () {
         //code for route for employee item add
         Route::get('/items', [ItemController::class, 'index'])->name('employee.items.index');
         Route::post('/status/items', [ItemController::class, 'status'])->name('employee.items.status');
-        
         Route::group(['prefix' => 'items'], function () {
             Route::get('/create', [ItemController::class, 'create'])->name('employee.items.create');
             Route::post('/store', [ItemController::class, 'store'])->name('employee.items.store');
             Route::get('/show/{id}', [ItemController::class, 'show'])->name('employee.items.show');    
             Route::get('/{id}/edit', [ItemController::class, 'edit'])->name('employee.items.edit');
-            //Route::patch('/{id}/update', [ItemController::class, 'update'])->name('employee.items.update');
             Route::patch('/{item}/update', [ItemController::class, 'update'])->name('employee.items.update');
             Route::delete('/{id}/destroy', [ItemController::class, 'destroy'])->name('employee.items.destroy');
             Route::post('/load-item-type-data', [ItemController::class, 'loadItemTypeData'])->name('employee.load.item.type.data');
+            Route::get('/download-pdf', [ItemController::class, 'downloadPDF'])->name('employee.items.download.pdf');
         });
         
+
+        //code for route for employee item add
+        Route::get('/manage-orders', [ManageOrderController::class, 'index'])->name('employee.manage-orders.index');
+        //Route::post('/status/manage-orders', [ManageOrderController::class, 'status'])->name('employee.manage-orders.status');
+        Route::group(['prefix' => 'manage-orders'], function () {
+            Route::get('/create', [ManageOrderController::class, 'create'])->name('employee.manage-orders.create');
+            Route::post('/store', [ManageOrderController::class, 'store'])->name('employee.manage-orders.store');
+            Route::get('/show/{id}', [ManageOrderController::class, 'show'])->name('employee.manage-orders.show');    
+            //Route::get('/{id}/edit', [ManageOrderController::class, 'edit'])->name('employee.manage-orders.edit');
+            //Route::patch('/{manageOrder}/update', [ManageOrderController::class, 'update'])->name('employee.manage-orders.update');
+            //Route::delete('/{id}/destroy', [ManageOrderController::class, 'destroy'])->name('employee.manage-orders.destroy');
+            Route::post('/customer-billing-address', [ManageOrderController::class, 'customerBillingAddress'])->name('employee.customer.billing.address');
+            Route::post('/load-more-item-data', [ManageOrderController::class, 'loadMoreItemData'])->name('employee.load.more.item.data');
+        });
     });
 });
 

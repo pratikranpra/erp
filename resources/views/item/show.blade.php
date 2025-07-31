@@ -68,11 +68,11 @@
                                 </div>
                                 <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                                     <dt class="text-sm font-medium leading-6 text-gray-900">Category Id</dt>
-                                    <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{{ $item->category_id }}</dd>
+                                    <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{{ $item->getParentCategoryNameAttribute() }}</dd>
                                 </div>
                                 <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                                     <dt class="text-sm font-medium leading-6 text-gray-900">Subcategory Id</dt>
-                                    <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{{ $item->subcategory_id }}</dd>
+                                    <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{{ $item->getParentSubcategoryNameAttribute() }}</dd>
                                 </div>
                                 @if($child_items->isNotEmpty())
                                 <div class="px-4 py-6 sm:px-0">

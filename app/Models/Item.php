@@ -85,6 +85,7 @@ class Item extends Model
         return $this->imageDetails ? $this->imageDetails->name : ' ';
     }
 
+    
 
     
 }

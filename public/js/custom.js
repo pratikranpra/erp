@@ -86,4 +86,47 @@ $(document).ready(function () {
 		$(".product_type_data_" + itemID).remove();
 	});
 
+	//funcation for customer billing address
+	$(document).on('change', '.customer_id', function () {
+		var customerId = $(this).val();
+		var module = $(this).attr('data-module');
+		if (customerId != '') {
+			$.ajax({
+				url: `${BASE_URL}/${guardPrefix}/manage-orders/customer-billing-address`,
+				type: 'POST',
+				data: { customer_id: customerId, _token: $('meta[name="csrf-token"]').attr('content') },
+				success: function (response) {
+					if (response.status == 'success') {
+						if(response.data != ''){
+							$(".customer_shipping_address").html(response.data);
+						}
+						
+					} else {
+						toastr.error(response.message);
+					}
+				},
+				error: function (xhr, status, error) {
+					console.log(error)
+					toastr.error('Error');
+				}
+			});
+		} else {
+			//$(".customer_shipping_address").html('');
+		}
+	});
+
+	flatpickr("#order_date", {
+        enableTime: false,
+        dateFormat: "Y-m-d",
+        altInput: false,
+        altFormat: "F j, Y - h:i K",
+		minDate: "today"
+    });
+	flatpickr("#delivery_date", {
+		enableTime: false,
+		dateFormat: "Y-m-d",
+		altInput: false,
+		altFormat: "F j, Y - h:i K",
+		minDate: "today",
+	});
 });

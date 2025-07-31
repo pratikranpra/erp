@@ -241,6 +241,30 @@
                     </li>
 
                     <li>
+                        <a @click.prevent="selected = (selected === 'Pages7' ? '':'Pages7')" class="menu-item group" href="#">
+                            <i class="fa fa-shopping-cart "></i>
+                            <span :class="sidebarToggle ? 'lg:hidden' : ''" class="menu-item-text">
+                                Manage Orders
+                            </span>
+                            <svg :class="[(selected === 'Pages7') ? 'menu-item-arrow-active' : 'menu-item-arrow-inactive', sidebarToggle ? 'lg:hidden' : '' ]" class="menu-item-arrow absolute right-2.5 top-1/2 -translate-y-1/2 stroke-current" fill="none" height="20" viewbox="0 0 20 20" width="20" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M4.79175 7.39584L10.0001 12.6042L15.2084 7.39585" stroke="" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5">
+                                </path>
+                            </svg>
+                        </a>
+                        <!-- Dropdown Menu Start -->
+                        <div :class="(selected === 'Pages7') ? 'block' :'hidden'" class="overflow-hidden transform translate">
+                            <ul :class="sidebarToggle ? 'lg:hidden' : 'flex'" class="flex flex-col gap-1 mt-2 menu-dropdown pl-9">
+                                <li>
+                                    <a class="menu-dropdown-item group {{ Request::path() == 'admin/manage-orders' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive' }}" href="{{ url('/admin/manage-orders') }}">
+                                        Manage Orders
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        <!-- Dropdown Menu End -->
+                    </li>
+
+                    <li>
                         <a @click.prevent="selected = (selected === 'gst-masters' ? '':'gst-masters')" class="menu-item group" href="#">
                             <i class="fa fa-sitemap"></i>
                             <span :class="sidebarToggle ? 'lg:hidden' : ''" class="menu-item-text">

@@ -8,6 +8,7 @@ use App\Models\Category;
 use App\Models\ChildItem;
 use App\Models\Item;
 use App\Models\ItemImage;
+use Barryvdh\DomPDF\Facade\Pdf as domPDF;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -243,5 +244,20 @@ class ItemController extends Controller
         $commonCont = new commonConstroller();
         $html = $commonCont->itemData($employee_id);
         return response()->json([ 'status' => 'success', 'message' =>"", 'data' => $html ]);
+    }
+
+    public function downloadPDF(Request $request)
+    {
+        $employee_id = employee_id();
+        //$items = Item::with('imageDetails')->orderBy('id', 'desc')->get();
+        if($employee_id > 0){
+            $items = Item::with('imageDetails')->where('employee_id','=',$employee_id)->orderBy('id', 'desc')->paginate();
+        }else{
+            // For admin or other users, show all items
+            $items = Item::with('imageDetails')->orderBy('id', 'desc')->paginate();
+        }
+        $pdf = domPDF::loadView('item.donwonload_items', compact('items'));
+        //$pdf->setPaper('A4', 'portrait');   
+        return $pdf->download('item-lists.pdf');
     }
 }

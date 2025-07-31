@@ -71,6 +71,8 @@
 
 
     {{-- Toastr Message --}}
+    
+
     <script>
         @if(session('success'))
             toastr.success("{{ session('success') }}");
@@ -92,8 +94,9 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
     <script src="{{ asset('assets/js/bundle.js') }}"></script>
     <script src="{{ asset('js/custom.js') }}"></script>
-
-
+    @stack('scripts')
+    
 
     </body>
+    
 </html>
