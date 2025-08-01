@@ -79,16 +79,18 @@ class ManageOrderController extends Controller
             $employee_id = employee_id();
             $order_id = $manageorders->id;
             $manageorders->employee_id = $employee_id;
-            log::info("Shop ID: " . $shipping_address_id);
-            if(!is_int($shipping_address_id)){
+            //log::info("Shop ID: " . $shipping_address_id);
+            if (!is_numeric($shipping_address_id) &&  !empty(trim($shipping_address_id)) ) {
                     $customer_ship_address = CustomerShippingAddress::create([
                         'customer_id' => $customer_id,
                         'address' => $shipping_address_id,
                         'status' => "active",
                     ]);
                     $new_shipping_address_id = $customer_ship_address->id;
-                    log::info("New Shipping Address ID: " . $new_shipping_address_id);
+                    //log::info("New Shipping Address ID: " . $new_shipping_address_id);
                     $manageorders->shipping_address_id = $new_shipping_address_id;
+            }else{
+                $manageorders->shipping_address_id = $shipping_address_id;   
             }
             $manageorders->save();
             // addd item to order_item_lists
@@ -135,7 +137,7 @@ class ManageOrderController extends Controller
      */
     public function show($id): View
     {
-        $manageOrder = ManageOrder::find($id);
+        $manageOrder = ManageOrder::with('shippingAddess')->find($id);
         $orderItemLists = OrderItemLists::where('order_id', $id)
                             ->leftjoin('items', 'order_item_lists.order_item_id', '=', 'items.id')
                             ->select('order_item_lists.*', 'items.name as item_name')

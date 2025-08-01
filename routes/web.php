@@ -13,6 +13,7 @@ use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\GstMasterController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\ManageOrderController;
+use App\Http\Controllers\ManageOrderRequestController;
 use App\Http\Controllers\OtherUserController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RoleController;
@@ -22,6 +23,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\VendorController;
 use App\Models\CustomerShippingAddress;
 use Illuminate\Support\Facades\Route;
+
 
 
 
@@ -69,6 +71,12 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => 'auth'], fu
     Route::group(['prefix' => 'manage-orders'], function () {
         Route::post('/customer-billing-address', [ManageOrderController::class, 'customerBillingAddress'])->name('customer.billing.address');
         Route::post('/load-more-item-data', [ManageOrderController::class, 'loadMoreItemData'])->name('load.more.item.data');
+    });
+    Route::group(['prefix' => 'manage-orders-request'], function () {
+        Route::get('/', [ManageOrderRequestController::class, 'index'])->name('manage.orders.request.index');
+        Route::get('/show/{id}', [ManageOrderRequestController::class, 'show'])->name('manage.orders.request.show');
+        Route::post('/manage-orders-request-complete', [ManageOrderRequestController::class, 'completeOrder'])->name('manage.orders.request.complete');
+        Route::get('/download-purchase-bill/{id}', [ManageOrderRequestController::class, 'downloadPurchaseBill'])->name('download-purchase-bill.pdf');
     }); 
 
     Route::group([
@@ -106,6 +114,7 @@ Route::middleware('auth')->resource('/admin/companies', CompanyController::class
 Route::middleware('auth')->resource('/admin/branches', BranchController::class);
 Route::middleware('auth')->resource('/admin/items', ItemController::class);
 Route::middleware('auth')->resource('/admin/manage-orders', ManageOrderController::class);
+//Route::middleware('auth')->resource('/admin/manage-orders-request', ManageOrderController::class);
 Route::middleware('auth')->resource('/admin/gst-masters', GstMasterController::class);
 
 
