@@ -11,7 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('branches', function (Blueprint $table) {
+        Schema::create('branches', function (Blueprint $table) {
+            $table->bigInteger('id', true);
+            $table->string('name');
+            $table->string('address');
+            $table->string('handled_by');
+            $table->bigInteger('company_id')->index('company_id');
+            $table->enum('status', ['active', 'inactive']);
+            $table->dateTime('created_at');
+            $table->dateTime('updated_at');
             $table->string('city')->nullable();
             $table->string('state')->nullable();
             $table->string('gst_no')->nullable();
@@ -23,8 +31,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('branches', function (Blueprint $table) {
-            $table->dropColumn(['city', 'state', 'gst_no']);
-        });
+        Schema::dropIfExists('branches');
     }
 };

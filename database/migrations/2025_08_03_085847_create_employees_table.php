@@ -14,13 +14,16 @@ return new class extends Migration
         Schema::create('employees', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('email');
+            $table->string('password')->nullable();
+            $table->string('plain_password', 25)->nullable();
+            $table->bigInteger('role_id')->index('role_id');
             $table->string('user_pin');
             $table->string('department');
             $table->string('sub_department')->nullable();
             $table->bigInteger('contact');
             $table->bigInteger('home_contact')->nullable();
             $table->string('aadhar_no');
-            $table->string('attachment');
+            $table->string('attachment')->nullable();
             $table->string('aadhar_name');
             $table->enum('status', ['active', 'inactive']);
             $table->dateTime('updated_at');

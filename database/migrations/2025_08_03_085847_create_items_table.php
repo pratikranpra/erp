@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('items', function (Blueprint $table) {
             $table->bigInteger('id', true);
+            $table->integer('employee_id')->default(0);
             $table->string('sku');
             $table->string('name');
             $table->text('description');
@@ -23,8 +24,9 @@ return new class extends Migration
             $table->string('gst');
             $table->float('rate');
             $table->float('discount');
-            $table->integer('child_qty');
+            $table->integer('child_qty')->default(0);
             $table->enum('product_type', ['ready', 'mfg'])->default('ready');
+            $table->integer('estimate_delivery_days')->default(0);
             $table->enum('status', ['active', 'inactive'])->default('active');
             $table->dateTime('created_at');
             $table->dateTime('updated_at');
