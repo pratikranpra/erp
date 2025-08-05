@@ -61,7 +61,10 @@ class EmployeeController extends Controller
         Log::debug($request);
 
         // Branch ids
-        $item->branches()->sync($validated['branch_ids']);
+        $new_password = Hash::make($request->plain_password);   
+        
+        
+        Employee::find($item->id)->update(['password' => $new_password]);  
 
         // Main image
         if ($request->hasFile('attachment')) {
