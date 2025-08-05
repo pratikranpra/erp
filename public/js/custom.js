@@ -68,7 +68,7 @@ $(document).ready(function () {
 				data: { employee_id: employee_id, _token: $('meta[name="csrf-token"]').attr('content') },
 				success: function (response) {
 					//toastr.success(response.message);
-					alert(response.data);
+					//alert(response.data);
 					$(".product_type_data_item").append(response.data);
 					$("#add-product-type").show();
 				},
@@ -81,7 +81,7 @@ $(document).ready(function () {
 
 	$(document).on('click', '.remove-btn', function () {
 		var itemID = $(this).attr('data-itemID');
-		alert("Item ID: " + itemID);
+		//alert("Item ID: " + itemID);
 		// Remove the product type section with the specified itemID);
 		$(".product_type_data_" + itemID).remove();
 	});
