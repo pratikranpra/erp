@@ -10,11 +10,11 @@
         <x-text-input required id="plain_password" name="plain_password" type="password"  :value="old('plain_password', $employee?->plain_password)" class="mt-1 block w-full" placeholder="Your password" />
         <x-input-error class="mt-2" :messages="$errors->get('plain_password')"/>
     </div>
-    <div>
+    <!-- <div>
         <x-input-label for="user_pin" :value="__('User Pin')"/>
         <x-text-input id="user_pin" name="user_pin" type="number" class="mt-1 block w-full" :value="old('user_pin', $employee?->user_pin)" autocomplete="user_pin" placeholder="User Pin"/>
         <x-input-error class="mt-2" :messages="$errors->get('user_pin')"/>
-    </div>
+    </div> -->
 
     <div>
         <x-input-label for="role_id" :value="__('User Role')"/>

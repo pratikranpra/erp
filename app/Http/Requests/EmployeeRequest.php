@@ -23,7 +23,7 @@ class EmployeeRequest extends FormRequest
     {
         return [
 			'email' => 'required|string',
-			'user_pin' => 'required|string',
+			//'user_pin' => 'required|string',
 			'department' => 'required|string',
 			'sub_department' => 'string',
 			'contact' => 'required',

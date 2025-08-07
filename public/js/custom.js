@@ -14,10 +14,16 @@ $(document).ready(function () {
 		} else {
 			var status = _this.prop('checked') === true ? 'active' : 'inactive'
 		}
-
+		alert(module_nm);
 		if (module_nm != '') {
+			let UrlPath = "";
+			if(module_nm == "customer-shipping-addresses"){
+				 UrlPath = module_nm + '/status' ;
+			}else{
+				 UrlPath = 'status/' + module_nm;
+			}
 			$.ajax({
-				url: 'status/' + module_nm,
+				url: UrlPath,
 				type: 'POST',
 				data: { id: id, status: status, _token: $('meta[name="csrf-token"]').attr('content') },
 				success: function (response) {

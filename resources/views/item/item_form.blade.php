@@ -1,4 +1,4 @@
-<div class="product_type_data_{{$rand_num}} p-5 border rounded-md relative">
+<div class="product_type_data_{{$rand_num}} p-5 mb-2 border rounded-md relative">
     {{-- Product Type --}}
     <x-input-label for="item_type" :value="__('Item')" />
     <select name="item_type[]" class="w-full border-gray-300 rounded-md shadow-sm mt-1">

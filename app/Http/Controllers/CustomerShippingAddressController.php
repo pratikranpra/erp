@@ -87,4 +87,17 @@ class CustomerShippingAddressController extends Controller
         return Redirect::route('admin.customer-shipping-addresses.index',compact('customer_id'))
             ->with('success', 'CustomerShippingAddress deleted successfully');
     }
+
+    public function status(Request $request, CustomerShippingAddress $customer)
+    {
+        $status_arr = ['active', 'inactive'];
+        if($request->id > 0 && in_array($request->status, $status_arr)){
+            $customer = CustomerShippingAddress::find($request->id);
+            $customer->update(['status' => $request->status]);
+            
+            return response()->json([ 'status' => 'success', 'message' => 'Customer shipping updated successfully' ]);
+        }else{
+            return response()->json([ 'status' => 'error', 'message' => 'Invalid request' ]);
+        }
+    }
 }

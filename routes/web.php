@@ -89,6 +89,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => 'auth'], fu
         Route::get('customer-shipping-addresses/{address}/edit', [CustomerShippingAddressController::class, 'edit'])->name('edit');
         Route::patch('customer-shipping-addresses/{address}', [CustomerShippingAddressController::class, 'update'])->name('update');
         Route::delete('customer-shipping-addresses/{address}', [CustomerShippingAddressController::class, 'destroy'])->name('destroy');
+        Route::post('customer-shipping-addresses/status', [CustomerShippingAddressController::class, 'status'])->name('status');
     });
     
 });

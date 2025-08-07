@@ -54,7 +54,7 @@
         <x-input-error class="mt-2" :messages="$errors->get('product_type')"/>
         <input type="hidden" name="employee_id" value="{{ $employee_id }}">
     </div>
-    <div id="product-type-wrapper">
+    <div id="product-type-wrapper" class="pl-4">
         <div class="product_type_data_item">
             <!-- <div class="product_type_data p-5 border rounded-md relative">
                 {{-- Product Type --}}
@@ -105,7 +105,7 @@
 
         <!-- <button type="button" id="add-product-type" class="mt-4 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">
             + Add More -->
-        <button type="button" id="add-product-type" data-employee-id="{{ $employee_id }}" class="" style="{{ $item->product_type != 'mfg' ? 'display: none;' : '' }}">
+        <button type="button" id="add-product-type" data-employee-id="{{ $employee_id }}" class=" p-2" style="{{ $item->product_type != 'mfg' ? 'display: none;' : '' }}">
             + Add More
         </button>
     </div>
@@ -115,15 +115,15 @@
         <x-input-error class="mt-2" :messages="$errors->get('unit')"/>
     </div>
     <div>
-        <x-input-label for="weight" :value="__('Weight')"/>
+        <x-input-label for="weight" :value="__('Weight (Optional)')"/>
         <x-text-input id="weight" name="weight" type="number" class="mt-1 block w-full" :value="old('weight', $item?->weight)" autocomplete="weight" placeholder="Weight"/>
         <x-input-error class="mt-2" :messages="$errors->get('weight')"/>
     </div>
-    <div>
+    <!-- <div>
         <x-input-label for="gst" :value="__('Gst')"/>
         <x-text-input id="gst" name="gst" type="text" class="mt-1 block w-full" :value="old('gst', $item?->gst)" autocomplete="gst" placeholder="Gst"/>
         <x-input-error class="mt-2" :messages="$errors->get('gst')"/>
-    </div>
+    </div> -->
     <div>
         <x-input-label for="rate" :value="__('Rate')"/>
         <x-text-input id="rate" name="rate" type="number" class="mt-1 block w-full" :value="old('rate', $item?->rate)" autocomplete="rate" placeholder="Rate"/>
@@ -135,14 +135,14 @@
         <x-input-error class="mt-2" :messages="$errors->get('discount')"/>
     </div>
 
-    <div>
+    <!-- <div>
         <x-input-label for="child_qty" :value="__('Child Qty')"/>
         <x-text-input id="child_qty" name="child_qty" type="number" class="mt-1 block w-full" :value="old('child_qty', $item?->child_qty)" autocomplete="child_qty" placeholder="Child Qty"/>
         <x-input-error class="mt-2" :messages="$errors->get('child_qty')"/>
-    </div>
+    </div> -->
     <div>
         <x-input-label for="estimate_delivery_days" :value="__('Estimate Delivery Days')"/>
-        <x-text-input id="estimate_delivery_days" name="estimate_delivery_days" type="number" class="mt-1 block w-full" :value="old('estimate_delivery_days', $item?->estimate_delivery_days)" autocomplete="estimate_delivery_days" placeholder="Child Qty"/>
+        <x-text-input id="estimate_delivery_days" name="estimate_delivery_days" type="number"  min="0" class="mt-1 block w-full" :value="old('estimate_delivery_days', $item?->estimate_delivery_days)" autocomplete="estimate_delivery_days" placeholder="Child Qty"/>
         <x-input-error class="mt-2" :messages="$errors->get('estimate_delivery_days')"/>
     </div>
     <div class="flex items-center gap-4">

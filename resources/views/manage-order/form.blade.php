@@ -17,9 +17,9 @@
         <input type="hidden" name="employee_id" value="0" >
     </div>
     
-    <div class="all_item_list_data">
+    <div class="all_item_list_data pl-4">
         <div class="all_item_list">
-            <div class="product_type_data_{{$rand_num}} p-5 border rounded-md relative">
+            <div class="product_type_data_{{$rand_num}} p-5 mb-2 border rounded-md relative">
                 <div class="mt-4">
                     <x-input-label for="order_item_id" :value="__('Item')" />
                     <select name="order_item_id[{{$rand_num}}][]" class="w-full border-gray-300 order_item_id rounded-md shadow-sm mt-1">
@@ -50,8 +50,8 @@
                     <x-text-input name="order_item_discount[{{$rand_num}}][]" type="number"  class="mt-1 block w-full order_item_discount_{{$rand_num}}" placeholder="Discount" />
                     <x-input-error class="mt-2" :messages="$errors->get('order_item_discount')" />
                 </div>
-                <div class="custom_data_section">
-                    <div class="custom_data_{{$rand_num}}">
+                <div class="custom_data_section ">
+                    <div class="custom_data_{{$rand_num}} mb-2">
                     <div class="mt-4 md:flex md:space-x-4 custom_data_single_{{$rand_num}}_1">
                             <!-- Left Input -->
                             <div class="flex-2 md:space-x-4">
@@ -92,7 +92,7 @@
                 </div>
             </div>
         </div>
-        <button type="button" id="add-more-item" data-employee-id="0" class="">
+        <button type="button" id="add-more-item" data-employee-id="0" class="p-2">
                 + Add More
             </button>
     </div>
