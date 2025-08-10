@@ -84,7 +84,7 @@
                                                     <th class="px-4 py-2 text-left font-semibold text-gray-900">Item Name</th>
                                                     <th class="px-4 py-2 text-left font-semibold text-gray-900">Quantity</th>
                                                     <th class="px-4 py-2 text-left font-semibold text-gray-900">Unit</th>
-                                                    <th class="px-4 py-2 text-left font-semibold text-gray-900">Vendor Name</th>
+                                                    <!-- <th class="px-4 py-2 text-left font-semibold text-gray-900">Vendor Name</th> -->
                                                 </tr>
                                             </thead>
                                             <tbody class="bg-white divide-y divide-gray-100">
@@ -94,7 +94,7 @@
                                                     <td class="px-4 py-2">{{ ucfirst($single_child_item->item_name) }}</td>
                                                     <td class="px-4 py-2">{{ $single_child_item->item_child_qty }}</td>
                                                     <td class="px-4 py-2">{{ ucfirst($single_child_item->unit_name) }}</td>
-                                                    <td class="px-4 py-2">{{ ucfirst($single_child_item->vendor_name) }}</td>
+                                                    <!-- <td class="px-4 py-2">{{ ucfirst($single_child_item->vendor_name) }}</td> -->
                                                 </tr>  
                                                 @endforeach
                                                 
