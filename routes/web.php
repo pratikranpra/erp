@@ -65,12 +65,14 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => 'auth'], fu
 
     Route::group(['prefix' => 'items'], function () {
         Route::post('/load-item-type-data', [ItemController::class, 'loadItemTypeData'])->name('load.item.type.data');
+        Route::post('/load-sub-category-data', [ItemController::class, 'loadSubCategoryData'])->name('load.sub.category.data');
         Route::get('/download-pdf', [ItemController::class, 'downloadPDF'])->name('items.download.pdf');
     });
 
     Route::group(['prefix' => 'manage-orders'], function () {
         Route::post('/customer-billing-address', [ManageOrderController::class, 'customerBillingAddress'])->name('customer.billing.address');
         Route::post('/load-more-item-data', [ManageOrderController::class, 'loadMoreItemData'])->name('load.more.item.data');
+        Route::post('/load-vendor-data', [ManageOrderController::class, 'loadVendorData'])->name('load.vendor.data');
     });
     Route::group(['prefix' => 'manage-orders-request'], function () {
         Route::get('/', [ManageOrderRequestController::class, 'index'])->name('manage.orders.request.index');
@@ -153,6 +155,7 @@ Route::prefix('employee')->group(function () {
             Route::patch('/{item}/update', [ItemController::class, 'update'])->name('employee.items.update');
             Route::delete('/{id}/destroy', [ItemController::class, 'destroy'])->name('employee.items.destroy');
             Route::post('/load-item-type-data', [ItemController::class, 'loadItemTypeData'])->name('employee.load.item.type.data');
+            Route::post('/load-sub-category-data', [ItemController::class, 'loadSubCategoryData'])->name('employee.load.sub.category.data');
             Route::get('/download-pdf', [ItemController::class, 'downloadPDF'])->name('employee.items.download.pdf');
         });
         
@@ -169,6 +172,7 @@ Route::prefix('employee')->group(function () {
             //Route::delete('/{id}/destroy', [ManageOrderController::class, 'destroy'])->name('employee.manage-orders.destroy');
             Route::post('/customer-billing-address', [ManageOrderController::class, 'customerBillingAddress'])->name('employee.customer.billing.address');
             Route::post('/load-more-item-data', [ManageOrderController::class, 'loadMoreItemData'])->name('employee.load.more.item.data');
+            Route::post('/load-vendor-data', [ManageOrderController::class, 'loadVendorData'])->name('employee.load.vendor.data');
         });
     });
 });

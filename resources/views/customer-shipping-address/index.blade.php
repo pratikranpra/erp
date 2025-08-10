@@ -27,7 +27,8 @@
                                     <tr>
                                         <th scope="col" class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">No</th>
                                         
-									<th scope="col" class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">Customer Id</th>
+									<th scope="col" class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">Customer Name</th>
+									<th scope="col" class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">Mobile No</th>
 									<th scope="col" class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">Address</th>
 									<th scope="col" class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">Status</th>
 
@@ -37,9 +38,9 @@
                                     <tbody class="divide-y divide-gray-200 bg-white">
                                     @foreach ($customerShippingAddresses as $customerShippingAddress)
                                         <tr class="even:bg-gray-50">
-                                            <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-semibold text-gray-900">{{ ++$i }}</td>
-                                            
-										<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $customerShippingAddress->customer_id }}</td>
+                                        <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-semibold text-gray-900">{{ ++$i }}</td>
+                                        <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $customerShippingAddress->name != ""?$customerShippingAddress->name:"--" }}</td>
+										<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $customerShippingAddress->mobile_no !=""?$customerShippingAddress->mobile_no:"--" }}</td>
 										<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $customerShippingAddress->address }}</td>
 										<td>
                                             <label class="inline-flex items-center cursor-pointer">

@@ -24,9 +24,9 @@ class ManageOrderRequest extends FormRequest
         return [
 			'customer_id' => 'required',
 			'employee_id' => 'required',
-			'sku' => 'string',
+			'sku' => 'nullable',
 			'remark' => 'string',
-			'product_type' => 'required',
+			'product_type' => 'nullable',
 			'shipping_address_id' => 'required',
 			'shopping_mode' => 'required',
 			'transporter' => 'string',

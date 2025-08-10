@@ -30,7 +30,7 @@ class CustomerShippingAddress extends Model
      *
      * @var array<int, string>
      */
-    protected $fillable = ['customer_id', 'address', 'status'];
+    protected $fillable = ['customer_id','name','mobile_no','address', 'status'];
 
 
 }

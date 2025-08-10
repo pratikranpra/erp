@@ -14,7 +14,13 @@ class OrderItemLists extends Model
         'order_item_unit',
         'order_item_rate',
         'order_item_disc',
+        'vendor_id',
         'order_item_custom_data',
     ];
     protected $table = 'order_item_lists';
+
+    public function item()
+    {
+        return $this->belongsTo(Item::class, 'order_item_id');
+    }
 }

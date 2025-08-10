@@ -85,7 +85,13 @@ class Item extends Model
         return $this->imageDetails ? $this->imageDetails->name : ' ';
     }
 
-    
-
+    public function unitDetail(){
+        return $this->belongsTo(\App\Models\Unit::class,'unit', 'id');
+    }
+    public function getUnitNameAttribute()
+    {
+        // Check if parentCategory exists and return its name
+        return $this->unitDetail ? $this->unitDetail->name : '--';
+    }
     
 }

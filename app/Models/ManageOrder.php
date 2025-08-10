@@ -69,6 +69,6 @@ class ManageOrder extends Model
     public function getEmployeeName()
     {
         // Check if parentCategory exists and return its name
-        return $this->employeeData ? $this->employeeData->email : '-';
+        return $this->employeeData ? $this->employeeData->email : 'Super Admin';
     }
 }

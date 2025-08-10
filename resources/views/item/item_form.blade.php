@@ -29,14 +29,24 @@
 
     {{-- Vendor --}}
     <div class="mt-4">
-        <x-input-label for="vendor" :value="__('Vendor Name')" />
-        <select name="item_vendor[]" class="w-full border-gray-300 rounded-md shadow-sm mt-1">
-            <option value="">Select Vendor</option>
+    <x-input-label for="vendor" :value="__('Vendor Name')" />
+
+    <select name="item_vendor[{{ $rand_num }}][]" multiple
+        class="w-full border-gray-300 rounded-md shadow-sm mt-1">
+        <option value="">Select Vendor</option>
+
             @foreach($vendors as $key => $single_vendor)
-                <option value="{{ $single_vendor->id }}" {{ ( isset($select_item->item_child_vendor) &&  $select_item->item_child_vendor == $single_vendor->id) ?"selected":"" }}>{{ $single_vendor->name }}</option>
+                <option value="{{ $single_vendor->id }}"
+                    {{ (isset($select_item->item_child_vendor) 
+                        && in_array($single_vendor->id, explode(',', $select_item->item_child_vendor))) 
+                        ? 'selected' 
+                        : '' }}>
+                    {{ $single_vendor->name }}
+                </option>
             @endforeach
         </select>
     </div>
+
 
     {{-- Remove Button --}}
     <button type="button" data-itemID={{$rand_num}}   class="remove-btn remove_btn_{{$rand_num}} absolute top-2 right-2 text-red-600 hover:text-red-800">✖</button>

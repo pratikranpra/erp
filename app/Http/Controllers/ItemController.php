@@ -8,6 +8,7 @@ use App\Models\Category;
 use App\Models\ChildItem;
 use App\Models\Item;
 use App\Models\ItemImage;
+use App\Models\Unit;
 use Barryvdh\DomPDF\Facade\Pdf as domPDF;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -32,6 +33,7 @@ class ItemController extends Controller
             // For admin or other users, show all items
             $items = Item::with('imageDetails')->orderBy('id', 'desc')->paginate();
         }
+        //dd($items);
         return view('item.index', compact('items'))
             ->with('i', ($request->input('page', 1) - 1) * $items->perPage());
     }
@@ -44,10 +46,11 @@ class ItemController extends Controller
         $item = new Item();
         $product_type = ['ready' => 'Readymade', 'mfg' => 'Manufactured'];
         $all_cats = Category::where('parent_id', '=', 0)->get();
-        $all_subcats = Category::where('parent_id', '>', 0)->get();
+        $all_subcats = [];
+        $all_units_lists = Unit::where('status', '=', "active")->get();
         $child_html = "";
         $employee_id = employee_id();
-        return view('item.create', compact('item', 'product_type', 'all_cats', 'all_subcats','employee_id','child_html'));
+        return view('item.create', compact('item', 'product_type', 'all_cats', 'all_subcats','employee_id','child_html','all_units_lists'));
     }
 
     /**
@@ -57,9 +60,10 @@ class ItemController extends Controller
     {
         // Validate and create the item 
         $item = Item::create($request->validated());
-        //Log::debug($request);
-        $product_type = $request->product_type??"ready";   
-        //dd($product_type);
+        $product_type = $request->product_type??"ready";  
+        $vendorArray = $request->input('item_vendor')??[];
+        $vendor_data  = array_values($vendorArray);
+        
         if($product_type == 'mfg'){
             //insert in sub item table
             $item_type = $request->item_type;
@@ -75,7 +79,8 @@ class ItemController extends Controller
                         'item_id' => $type,
                         'item_child_qty'=>$request->item_child_qty[$key] ?? 0,
                         'item_child_unit' => $request->item_unit[$key] ?? 0,
-                        'item_child_vendor' => $request->item_vendor[$key] ?? 0
+                        //'item_child_vendor' => $vendor_data[$key] ?? 0
+                        'item_child_vendor' => implode(",",isset($vendor_data[$key])?$vendor_data[$key]:""),
                     ]);
 
                     //code for deduct child_qty from parent item
@@ -169,9 +174,10 @@ class ItemController extends Controller
         }  
         $product_type = ['ready' => 'Ready made', 'mfg' => 'Manufactured'];
         $all_cats = Category::where('parent_id', '=', 0)->get();
-        $all_subcats = Category::where('parent_id', '>', 0)->get();
+        $all_subcats = Category::where('parent_id', '=', $item->category_id)->get();
+        $all_units_lists = Unit::where('status', '=', "active")->get();
 
-        return view('item.edit', compact('item', 'product_type', 'all_cats', 'all_subcats','employee_id','child_html'));
+        return view('item.edit', compact('item', 'product_type', 'all_cats', 'all_subcats','employee_id','child_html','all_units_lists'));
     }
 
     /**
@@ -185,6 +191,9 @@ class ItemController extends Controller
 
         ChildItem::where('parent_item_id', $parent_item_id)->delete();   
         $product_type = $request->product_type??"ready";   
+        $vendorArray = $request->input('item_vendor')??[];
+        $vendor_data  = array_values($vendorArray);
+        
         //dd($product_type);
         if($product_type == 'mfg'){
             //insert in sub item table
@@ -193,16 +202,17 @@ class ItemController extends Controller
                 if($type > 0){
                     //Log::debug('Creating Child Item', ['parent_item_id' => $item->id, 'type' => $type, 'qty' => $request->item_child_qty[$key] ?? 0]);
                     // Create a new child item
-                    Log::debug('Creating Child Item', ['parent_item_id' => $item->id, 'type' => $type, 'qty' => $request->item_child_qty[$key] ?? 0,
-                     'item_unit' => $request->item_unit[$key] ?? 0]);
-                    Log::info("message", ['parent_item_id' => $item->id, 'type' => $type, 'qty' => $request->item_child_qty[$key] ?? 0,
-                     'item_unit' => $request->item_unit[$key] ?? 0]);
+                    // Log::debug('Creating Child Item', ['parent_item_id' => $item->id, 'type' => $type, 'qty' => $request->item_child_qty[$key] ?? 0,
+                    //  'item_unit' => $request->item_unit[$key] ?? 0]);
+                    // Log::info("message", ['parent_item_id' => $item->id, 'type' => $type, 'qty' => $request->item_child_qty[$key] ?? 0,
+                    //  'item_unit' => $request->item_unit[$key] ?? 0]);
                     ChildItem::create([
                         'parent_item_id' => $item->id,
                         'item_id' => $type,
                         'item_child_qty'=>$request->item_child_qty[$key] ?? 0,
                         'item_child_unit' => $request->item_unit[$key] ?? 0,
-                        'item_child_vendor' => $request->item_vendor[$key] ?? 0
+                        //'item_child_vendor' => $request->item_vendor[$key] ?? 0
+                         'item_child_vendor' => implode(",",isset($vendor_data[$key])?$vendor_data[$key]:""),
                     ]);
                 }
             }
@@ -259,5 +269,13 @@ class ItemController extends Controller
         $pdf = domPDF::loadView('item.donwonload_items', compact('items'));
         //$pdf->setPaper('A4', 'portrait');   
         return $pdf->download('item-lists.pdf');
+    }
+
+    public function loadSubCategoryData(Request $request)
+    {
+        $category_id = $request->category_id > 0 ? $request->category_id : 0;
+        $commonCont = new commonConstroller();
+        $html = $commonCont->loadSubCategoryData($category_id);
+        return response()->json([ 'status' => 'success', 'message' =>"", 'data' => $html ]);
     }
 }

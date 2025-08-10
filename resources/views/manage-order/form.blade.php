@@ -1,5 +1,6 @@
 <div class="space-y-6">
     <div>
+         <input type="hidden" name="employee_id" value="0" >
         <x-input-label for="customer_id" :value="__('Customer')"/>
         <select id="customer_id" name="customer_id" data-employee-id="0" :value="old('customer_id', $manageOrder?->customer_id)"  data-id="{{ $manageOrder->id }}" data-module="items" class="w-full customer_id mt-4 border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm" label="">
             <option value="">Select Customer</option>
@@ -10,19 +11,19 @@
         <x-input-error class="mt-2" :messages="$errors->get('customer_id')"/>
     </div>
     
-    <div>
+    <!-- <div>
         <x-input-label for="sku" :value="__('Sku')"/>
         <x-text-input id="sku" name="sku" type="text" class="mt-1 block w-full" :value="old('sku', $manageOrder?->sku)" autocomplete="sku" placeholder="Sku"/>
         <x-input-error class="mt-2" :messages="$errors->get('sku')"/>
-        <input type="hidden" name="employee_id" value="0" >
-    </div>
+       
+    </div> -->
     
     <div class="all_item_list_data pl-4">
         <div class="all_item_list">
             <div class="product_type_data_{{$rand_num}} p-5 mb-2 border rounded-md relative">
                 <div class="mt-4">
                     <x-input-label for="order_item_id" :value="__('Item')" />
-                    <select name="order_item_id[{{$rand_num}}][]" class="w-full border-gray-300 order_item_id rounded-md shadow-sm mt-1">
+                    <select name="order_item_id[{{$rand_num}}][]" data-rand-id="{{$rand_num}}" class="w-full border-gray-300 order_item_id rounded-md shadow-sm mt-1">
                         <option value="">Select Item</option>
                         @foreach($items_lists as $key => $single_item)
                             <option value="{{ $single_item->id }}" data-rand-num="{{ $rand_num }}" data-qty="{{ $single_item->child_qty }}" data-unit="{{ $single_item->unit }}" data-discount="{{ $single_item->discount }}" data-rate="{{ $single_item->rate }}"  >{{ $single_item->name }}</option>
@@ -49,6 +50,13 @@
                     <x-input-label for="order_item_discount" :value="__('Order Item Discount')" />
                     <x-text-input name="order_item_discount[{{$rand_num}}][]" type="number"  class="mt-1 block w-full order_item_discount_{{$rand_num}}" placeholder="Discount" />
                     <x-input-error class="mt-2" :messages="$errors->get('order_item_discount')" />
+                </div>
+                <div class="mt-4 item_vendor_lists_{{$rand_num}}">
+                    <x-input-label for="vendor_id" :value="__('Item')" />
+                    <select name="vendor_id[{{$rand_num}}][]" data-rand-id="{{$rand_num}}" class="w-full border-gray-300 order_item_id rounded-md shadow-sm mt-1">
+                        <option value="">Select Vendor </option>
+                    </select>
+                    <x-input-error class="mt-2" :messages="$errors->get('vendor_id')" />
                 </div>
                 <div class="custom_data_section ">
                     <div class="custom_data_{{$rand_num}} mb-2">
@@ -129,7 +137,7 @@
         <x-input-error class="mt-2" :messages="$errors->get('remark')"/>
     </div>
 
-    <div>
+    <!-- <div>
         <x-input-label for="product_type" :value="__('Product Type')"/>
         <select id="product_type" name="product_type" data-employee-id="0" :value="old('product_type', $manageOrder?->product_type)"  data-id="{{ $manageOrder->id }}" data-module="items" class="w-full product_type mt-4 border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm" label="">
             <option value="">Select Product Type</option>
@@ -138,7 +146,7 @@
             @endforeach
         </select>
         <x-input-error class="mt-2" :messages="$errors->get('product_type')"/>
-    </div>
+    </div> -->
     <div class="customer_shipping_address">
         <x-input-label for="shipping_address_id" :value="__('Shipping Address')"/>
         <x-text-input id="shipping_address_id" name="shipping_address_id" type="text" class="mt-1 block w-full" :value="old('shipping_address_id', $manageOrder?->shipping_address_id)" autocomplete="shipping_address_id" placeholder="Shipping Address Id"/>
@@ -165,7 +173,7 @@
         <x-input-error class="mt-2" :messages="$errors->get('charge')"/>
     </div>
     
-
+    
     <div class="flex items-center gap-4">
         <x-primary-button>Submit</x-primary-button>
     </div>

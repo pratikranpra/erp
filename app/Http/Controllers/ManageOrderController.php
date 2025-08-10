@@ -3,11 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ManageOrderRequest;
+use App\Models\ChildItem;
 use App\Models\Customer;
 use App\Models\CustomerShippingAddress;
 use App\Models\Item;
 use App\Models\ManageOrder;
 use App\Models\OrderItemLists;
+use App\Models\Vendor;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
@@ -59,12 +61,13 @@ class ManageOrderController extends Controller
      */
     public function store(ManageOrderRequest $request): RedirectResponse
     {
-       // dd($request->all());
+       //dd($request->all());
         $order_item_id = request('order_item_id');
         $order_item_qty = request('order_item_qty');
         $order_item_unit = request('order_item_unit');
         $order_item_rate = request('order_item_rate');
         $order_item_discount = request('order_item_discount');
+        $order_vendor_id = request('vendor_id');
         $key_data = request('key');
         $value_data = request('value');
         $shipping_address_id = request('shipping_address_id');
@@ -92,6 +95,7 @@ class ManageOrderController extends Controller
             }else{
                 $manageorders->shipping_address_id = $shipping_address_id;   
             }
+            $manageorders->sku = "ORD-".round(microtime(true));
             $manageorders->save();
             // addd item to order_item_lists
             if(!empty($order_item_id)){
@@ -115,6 +119,7 @@ class ManageOrderController extends Controller
                         'order_item_unit' => ($order_item_unit[$key][0]) ?? 0,
                         'order_item_rate' => ($order_item_rate[$key][0]) ?? 0,
                         'order_item_disc' => ($order_item_discount[$key][0]) ?? 0,
+                        'vendor_id' => ($order_vendor_id[$key][0]) ?? 0,
                         'order_item_custom_data' => json_encode($custom_data),
                     ];
                     OrderItemLists::create($data);
@@ -140,7 +145,8 @@ class ManageOrderController extends Controller
         $manageOrder = ManageOrder::with('shippingAddess')->find($id);
         $orderItemLists = OrderItemLists::where('order_id', $id)
                             ->leftjoin('items', 'order_item_lists.order_item_id', '=', 'items.id')
-                            ->select('order_item_lists.*', 'items.name as item_name')
+                            ->leftjoin('vendors', 'vendors.id', '=', 'order_item_lists.vendor_id')
+                            ->select('order_item_lists.*', 'items.name as item_name',"vendors.name as vendor_name")
                             ->get();
 
         return view('manage-order.show', compact('manageOrder','orderItemLists'));
@@ -190,5 +196,21 @@ class ManageOrderController extends Controller
         $commonCont = new commonConstroller();
         $html = $commonCont->itemOrderData($employee_id);
         return response()->json([ 'status' => 'success', 'message' =>"", 'data' => $html ]);
+    }
+    public function loadVendorData(Request $request)
+    {
+        $itemId = $request->input('item_id');
+        $rand_num= $request->input('rand_id');
+
+        $get_child_item_detail =  ChildItem::query()->where('parent_item_id',$itemId)->first();
+        $item_Vendor_ids = (isset($get_child_item_detail->item_child_vendor) && $get_child_item_detail->item_child_vendor !="")?(explode(",",$get_child_item_detail->item_child_vendor)):[0];
+        $vendorLists = Vendor::whereIn('id', $item_Vendor_ids)->get();
+        $html = view('manage-order.vendor_lists', compact('vendorLists','rand_num'))->render();
+
+        return response()->json([
+            'status'  => 'success',
+            'message' => '',
+            'data'    => $html
+        ]);
     }
 }

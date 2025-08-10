@@ -14,14 +14,14 @@ $(document).ready(function () {
 		} else {
 			var status = _this.prop('checked') === true ? 'active' : 'inactive'
 		}
-		alert(module_nm);
+		//alert(module_nm);
 		if (module_nm != '') {
 			let UrlPath = "";
 			if(module_nm == "customer-shipping-addresses"){
 				 UrlPath = module_nm + '/status' ;
 			}else{
 				 UrlPath = 'status/' + module_nm;
-			}
+			}	
 			$.ajax({
 				url: UrlPath,
 				type: 'POST',
@@ -37,6 +37,40 @@ $(document).ready(function () {
 		}
 	})
 
+	//code load sub category based on category select
+	$("#category_id").on("change",function(){
+		var _this = $(this)
+		var category_id = _this.val();
+		$.ajax({
+				url: `${BASE_URL}/${guardPrefix}/items/load-sub-category-data`,
+				type: 'POST',
+				data: { category_id: category_id, _token: $('meta[name="csrf-token"]').attr('content') },
+				success: function (response) {
+					$(".sub_category_data_cls").html(response.data);
+				},
+				error: function (xhr, status, error) {
+					toastr.error('Error');
+				}
+			});
+	});
+
+	// code for load vendor list for order
+	$(document).on("change",".order_item_id",function(){
+		var _this = $(this)
+		var item_id = _this.val();
+		var rand_id = $(this).attr('data-rand-id');
+		$.ajax({
+				url: `${BASE_URL}/${guardPrefix}/manage-orders/load-vendor-data`,
+				type: 'POST',
+				data: { item_id: item_id,rand_id: rand_id, _token: $('meta[name="csrf-token"]').attr('content') },
+				success: function (response) {
+					$(".item_vendor_lists_"+rand_id).html(response.data);
+				},
+				error: function (xhr, status, error) {
+					toastr.error('Error');
+				}
+			});
+	});
 	$('.product_type').on('change', function () {
 		var _this = $(this)
 		var id = $(this).attr('data-id')
@@ -117,7 +151,7 @@ $(document).ready(function () {
 				}
 			});
 		} else {
-			//$(".customer_shipping_address").html('');
+			$(".customer_shipping_address").html('');
 		}
 	});
 

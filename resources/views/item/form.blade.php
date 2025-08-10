@@ -38,7 +38,7 @@
         <x-input-error class="mt-2" :messages="$errors->get('category_id')"/>
     </div>
 
-    <div>
+    <div class="sub_category_data_cls">
         <x-input-label for="subcategory_id" :value="__('Subcategory Id')"/>
         <x-text-select id="subcategory_id" name="subcategory_id" :value="old('subcategory_id', $item?->subcategory_id)" class="mt-4"   label="" :options="$all_subcats"  />
         <x-input-error class="mt-2" :messages="$errors->get('subcategory_id')"/>
@@ -109,9 +109,9 @@
             + Add More
         </button>
     </div>
-    <div>
+     <div>
         <x-input-label for="unit" :value="__('Unit')"/>
-        <x-text-input id="unit" name="unit" type="number" class="mt-1 block w-full" :value="old('unit', $item?->unit)" autocomplete="unit" placeholder="Unit"/>
+        <x-text-select id="unit" name="unit" :value="old('unit', $item?->unit)" class="mt-4" label="" :options="$all_units_lists"  />
         <x-input-error class="mt-2" :messages="$errors->get('unit')"/>
     </div>
     <div>
@@ -135,14 +135,14 @@
         <x-input-error class="mt-2" :messages="$errors->get('discount')"/>
     </div>
 
-    <!-- <div>
-        <x-input-label for="child_qty" :value="__('Child Qty')"/>
+    <div>
+        <x-input-label for="child_qty" :value="__('Quantity')"/>
         <x-text-input id="child_qty" name="child_qty" type="number" class="mt-1 block w-full" :value="old('child_qty', $item?->child_qty)" autocomplete="child_qty" placeholder="Child Qty"/>
         <x-input-error class="mt-2" :messages="$errors->get('child_qty')"/>
-    </div> -->
+    </div>
     <div>
         <x-input-label for="estimate_delivery_days" :value="__('Estimate Delivery Days')"/>
-        <x-text-input id="estimate_delivery_days" name="estimate_delivery_days" type="number"  min="0" class="mt-1 block w-full" :value="old('estimate_delivery_days', $item?->estimate_delivery_days)" autocomplete="estimate_delivery_days" placeholder="Child Qty"/>
+        <x-text-input id="estimate_delivery_days" name="estimate_delivery_days" type="number"  min="0" class="mt-1 block w-full" :value="old('estimate_delivery_days', $item?->estimate_delivery_days)" autocomplete="estimate_delivery_days" placeholder="Estimate Delivery Days"/>
         <x-input-error class="mt-2" :messages="$errors->get('estimate_delivery_days')"/>
     </div>
     <div class="flex items-center gap-4">

@@ -51,6 +51,15 @@ class ManageOrderRequestController extends Controller
     {
         $order_id = $request->order_id > 0 ? $request->order_id : 0;
         $bill_no = $request->bill_no > 0 ? $request->bill_no : 0;
+
+        $orderItems = OrderItemLists::with('item')
+        ->where('order_id', $order_id)
+        ->get();
+
+        foreach ($orderItems as $orderItem) {
+            $orderItem->item->decrement('child_qty', $orderItem->order_item_qty);
+        }
+
         $completeOrder = ManageOrder::where('id', $order_id)->update(['status' => 1,'bill_no' => $bill_no]);
         $pfdDownloadBtn = '<a href="'.route('admin.download-purchase-bill.pdf',$order_id).'" data-orderid="'.$order_id.'" class="bg-[#007bff] hover:bg-gray-100 text-white p-2 donwloadPurchaseBill">'.__('Purchase Bill').'</a>';
         return response()->json([ 'status' => 'success', 'message' =>"Order Completed Successfully",'data'=>$pfdDownloadBtn ]);

@@ -23,6 +23,8 @@ class CustomerShippingAddressRequest extends FormRequest
     {
         return [
 			'customer_id' => 'required',
+			'name' => 'required',
+			'mobile_no' => 'required|numeric',
 			'address' => 'string',
 			'status' => 'required',
         ];

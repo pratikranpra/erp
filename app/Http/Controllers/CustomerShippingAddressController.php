@@ -70,7 +70,6 @@ class CustomerShippingAddressController extends Controller
      */
     public function update($customer_id,$address,CustomerShippingAddressRequest $request ): RedirectResponse
     {
-        
         $customerShippingAddress = CustomerShippingAddress::find($address);
         $customerShippingAddress->update($request->validated());
 

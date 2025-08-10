@@ -1,7 +1,7 @@
 <div class="product_type_data_{{$rand_num}} p-5 mb-2 border rounded-md relative">
     <div class="mt-4">
         <x-input-label for="order_item_id" :value="__('Item')" />
-        <select name="order_item_id[{{$rand_num}}][]" class="w-full border-gray-300 order_item_id rounded-md shadow-sm mt-1">
+        <select name="order_item_id[{{$rand_num}}][]" data-rand-id="{{$rand_num}}"  class="w-full border-gray-300 order_item_id rounded-md shadow-sm mt-1">
             <option value="">Select Item</option>
             @foreach($items as $key => $single_item)
                 <option value="{{ $single_item->id }}" data-rand-num="{{ $rand_num }}" data-qty="{{ $single_item->child_qty }}" data-unit="{{ $single_item->unit }}" data-discount="{{ $single_item->discount }}" data-rate="{{ $single_item->rate }}"  >{{ $single_item->name }}</option>
@@ -28,6 +28,9 @@
         <x-input-label for="order_item_discount" :value="__('Order Item Discount')" />
         <x-text-input name="order_item_discount[{{$rand_num}}][]" type="number"  class="mt-1 block w-full order_item_discount_{{$rand_num}}" placeholder="Discount" />
         <x-input-error class="mt-2" :messages="$errors->get('order_item_discount')" />
+    </div>
+    <div class="mt-4 item_vendor_lists_{{$rand_num}}">
+                    
     </div>
     <div class="custom_data_section">
         <div class="custom_data_{{$rand_num}}">
