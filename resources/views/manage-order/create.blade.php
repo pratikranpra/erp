@@ -113,6 +113,8 @@
                             //toastr.success(response.message);
                             $(".all_item_list").append(response.data);
                             $("#add-more-item").show();
+                            initDatePickers();
+
                         },
                         error: function (xhr, status, error) {
                             //console.log(error)
@@ -120,6 +122,22 @@
                         }
                     });
             });
+            flatpickr(".delivery_date", {
+                    enableTime: false,
+                    dateFormat: "Y-m-d",
+                    altInput: false,
+                    altFormat: "F j, Y - h:i K",
+                    minDate: "today",
+                });
+            function initDatePickers() {
+                flatpickr(".delivery_date", {
+                    enableTime: false,
+                    dateFormat: "Y-m-d",
+                    altInput: false,
+                    altFormat: "F j, Y - h:i K",
+                    minDate: "today",
+                });
+            }
         });
     </script>
 

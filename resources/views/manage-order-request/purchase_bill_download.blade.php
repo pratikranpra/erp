@@ -76,6 +76,7 @@
             <th>Item</th>
             <th>Item Rate</th>
             <th>Quantity</th>
+            <th>Delivery Date</th>
             <th>Item Custom Data</th>
             <th class="text-right">Subtotal</th>
           </tr>
@@ -94,6 +95,7 @@
               <td >{{ ucfirst($single_order_item->item_name) }}</td>
               <td class="text-right">{{ "₹".$single_order_item->order_item_rate }}</td>
               <td >{{ $single_order_item->order_item_qty }}</td>
+              <td >{{ date("Y-m-d",strtotime($single_order_item->delivery_date)) }}</td>
               <td >
               @php
                   $total = $total + ($single_order_item->order_item_rate * $single_order_item->order_item_qty);

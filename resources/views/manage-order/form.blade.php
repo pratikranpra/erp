@@ -51,6 +51,19 @@
                     <x-text-input name="order_item_discount[{{$rand_num}}][]" type="number"  class="mt-1 block w-full order_item_discount_{{$rand_num}}" placeholder="Discount" />
                     <x-input-error class="mt-2" :messages="$errors->get('order_item_discount')" />
                 </div>
+                <div>
+                        <x-input-label for="delivery_date" :value="__('Delivery Date')" />
+                        <x-text-input
+                            id="delivery_date_{{$rand_num}}" 
+                            name="delivery_date[{{$rand_num}}][]" 
+                            type="text"
+                            class="mt-1 block w-full delivery_date"
+                            value=""
+                            autocomplete="off"
+                            placeholder="Select Date & Time"
+                        />
+                        <x-input-error class="mt-2" :messages="$errors->get('delivery_date')" />
+                </div>
                 <div class="mt-4 item_vendor_lists_{{$rand_num}}">
                     <x-input-label for="vendor_id" :value="__('Item')" />
                     <select name="vendor_id[{{$rand_num}}][]" data-rand-id="{{$rand_num}}" class="w-full border-gray-300 order_item_id rounded-md shadow-sm mt-1">
@@ -118,7 +131,7 @@
             />
             <x-input-error class="mt-2" :messages="$errors->get('order_date')" />
     </div>
-    <div>
+    <!-- <div>
             <x-input-label for="delivery_date" :value="__('Delivery Date')" />
             <x-text-input
                 id="delivery_date"
@@ -130,7 +143,7 @@
                 placeholder="Select Date & Time"
             />
             <x-input-error class="mt-2" :messages="$errors->get('delivery_date')" />
-    </div>
+    </div> -->
     <div>
         <x-input-label for="remark" :value="__('Remark')"/>
         <x-text-input id="remark" name="remark" type="text" class="mt-1 block w-full" :value="old('remark', $manageOrder?->remark)" autocomplete="remark" placeholder="Remark"/>

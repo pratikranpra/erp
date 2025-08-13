@@ -15,6 +15,7 @@ class OrderItemLists extends Model
         'order_item_rate',
         'order_item_disc',
         'vendor_id',
+        'delivery_date',
         'order_item_custom_data',
     ];
     protected $table = 'order_item_lists';

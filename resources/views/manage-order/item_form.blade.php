@@ -29,6 +29,19 @@
         <x-text-input name="order_item_discount[{{$rand_num}}][]" type="number"  class="mt-1 block w-full order_item_discount_{{$rand_num}}" placeholder="Discount" />
         <x-input-error class="mt-2" :messages="$errors->get('order_item_discount')" />
     </div>
+    <div>
+            <x-input-label for="delivery_date" :value="__('Delivery Date')" />
+            <x-text-input
+                id="delivery_date_{{$rand_num}}"
+                name="delivery_date[{{$rand_num}}][]"
+                type="text"
+                class="mt-1 block w-full delivery_date"
+                value=""
+                autocomplete="off"
+                placeholder="Select Date & Time"
+            />
+            <x-input-error class="mt-2" :messages="$errors->get('delivery_date')" />
+    </div>
     <div class="mt-4 item_vendor_lists_{{$rand_num}}">
                     
     </div>

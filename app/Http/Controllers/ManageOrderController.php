@@ -61,13 +61,14 @@ class ManageOrderController extends Controller
      */
     public function store(ManageOrderRequest $request): RedirectResponse
     {
-       //dd($request->all());
+        //dd($request->all());
         $order_item_id = request('order_item_id');
         $order_item_qty = request('order_item_qty');
         $order_item_unit = request('order_item_unit');
         $order_item_rate = request('order_item_rate');
         $order_item_discount = request('order_item_discount');
         $order_vendor_id = request('vendor_id');
+        $order_delivery_date = request('delivery_date');
         $key_data = request('key');
         $value_data = request('value');
         $shipping_address_id = request('shipping_address_id');
@@ -76,7 +77,7 @@ class ManageOrderController extends Controller
        try{
             $data = $request->validated();
 
-            $data = Arr::except($data, ['shipping_address_id']);
+            $data = Arr::except($data, ['shipping_address_id','delivery_date']);
 
             $manageorders =  ManageOrder::create($data);
             $employee_id = employee_id();
@@ -120,6 +121,7 @@ class ManageOrderController extends Controller
                         'order_item_rate' => ($order_item_rate[$key][0]) ?? 0,
                         'order_item_disc' => ($order_item_discount[$key][0]) ?? 0,
                         'vendor_id' => ($order_vendor_id[$key][0]) ?? 0,
+                        'delivery_date' => ($order_delivery_date[$key][0]) ?? 0,
                         'order_item_custom_data' => json_encode($custom_data),
                     ];
                     OrderItemLists::create($data);

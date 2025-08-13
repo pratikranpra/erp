@@ -49,6 +49,7 @@
                                                     <th class="px-4 py-2 text-left font-semibold text-gray-900">Unit</th>
                                                     <th class="px-4 py-2 text-left font-semibold text-gray-900">Item Rate</th>
                                                     <th class="px-4 py-2 text-left font-semibold text-gray-900">Item Discount</th>
+                                                    <th class="px-4 py-2 text-left font-semibold text-gray-900">Delivery Date</th>
                                                     <th class="px-4 py-2 text-left font-semibold text-gray-900">Item Custom Data</th>
                                                 </tr>
                                             </thead>
@@ -61,6 +62,7 @@
                                                     <td class="px-4 py-2">{{ $single_order_item->order_item_unit }}</td>
                                                     <td class="px-4 py-2">{{ $single_order_item->order_item_rate }}</td>
                                                     <td class="px-4 py-2">{{ $single_order_item->order_item_disc }}</td>
+                                                    <td class="px-4 py-2">{{ date("Y-m-d",strtotime($single_order_item->delivery_date)) }}</td>
                                                     <td class="px-4 py-2">
                                                     @php $attributes = json_decode($single_order_item->order_item_custom_data, true); @endphp
                                                         <ul>

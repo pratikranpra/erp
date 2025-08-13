@@ -30,7 +30,7 @@
 									<th scope="col" class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">Customer Id</th>
 									<th scope="col" class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">Sku</th>
 									<th scope="col" class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">Order Date</th>
-									<th scope="col" class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">Delivery Date</th>
+									<!-- <th scope="col" class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">Delivery Date</th> -->
 									<th scope="col" class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">Remark</th>
 									<!-- <th scope="col" class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">Product Type</th> -->
 									<th scope="col" class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">Shopping Mode</th>
@@ -48,7 +48,7 @@
 										<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $manageOrder->getCustomerName() }}</td>
 										<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $manageOrder->sku }}</td>
 										<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ date("Y-m-d",strtotime($manageOrder->order_date)) }}</td>
-										<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ date("Y-m-d",strtotime($manageOrder->delivery_date)) }}</td>
+										<!-- <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ date("Y-m-d",strtotime($manageOrder->delivery_date)) }}</td> -->
 										<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $manageOrder->remark }}</td>
 										<!-- <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $manageOrder->product_type == 1?"Manufacture":"ReadyMade" }}</td> -->
 										<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ ($manageOrder->shopping_mode == 1)?"Air":(($manageOrder->shopping_mode == 2)?"Road":(($manageOrder->shopping_mode == 3)?"Transport":"Other")) }}</td>
