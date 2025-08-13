@@ -28,12 +28,18 @@ class ItemController extends Controller
     {
         $employee_id = employee_id();
         if($employee_id > 0){
-            $items = Item::with('imageDetails')->where('employee_id','=',$employee_id)->orderBy('id', 'desc')->paginate();
+            $items = Item::with(['imageDetails' => function($query) {
+                $query->where('type','=','main')
+                    ->orderBy('id', 'asc');  
+            }])
+            ->where('employee_id','=',$employee_id)->orderBy('id', 'desc')->paginate();
         }else{
             // For admin or other users, show all items
-            $items = Item::with('imageDetails')->orderBy('id', 'desc')->paginate();
+            $items = Item::with(['imageDetails' => function($query) {
+                $query->where('type','=','main')
+                    ->orderBy('id', 'asc');  
+            }])->orderBy('id', 'desc')->paginate();
         }
-        //dd($items);
         return view('item.index', compact('items'))
             ->with('i', ($request->input('page', 1) - 1) * $items->perPage());
     }
@@ -104,7 +110,7 @@ class ItemController extends Controller
             
             ItemImage::create([
                 'name'          => $mainImageName,
-                'image_type'    => 'main', 
+                'type'    => 'main', 
                 'items_id'      => $item->id
             ]);
         } else {
@@ -122,7 +128,7 @@ class ItemController extends Controller
                 
                 ItemImage::create([
                     'name'          => $subImageName,
-                    'image_type'    => 'sub', 
+                    'type'    => 'sub', 
                     'items_id'      => $item->id
                 ]);
             }
@@ -216,6 +222,45 @@ class ItemController extends Controller
                     ]);
                 }
             }
+        }
+
+        // Main image
+        if ($request->hasFile('main_image')) {
+            ItemImage::where('items_id', $item->id)->where('type',"main")->delete(); 
+            $mainImage = $request->file('main_image');
+            $extension = $mainImage->getClientOriginalExtension(); 
+            $mainImageName = Str::random(40) . '_main.' . $extension; 
+            $mainImagePath = $mainImage->storeAs('images/items', $mainImageName, 'public');
+
+            //Log::debug('Main Image Path: ' . $mainImagePath);
+            
+            ItemImage::create([
+                'name'          => $mainImageName,
+                'type'    => 'main', 
+                'items_id'      => $item->id
+            ]);
+        } else {
+            Log::debug('No main image uploaded');
+        }
+
+        // Sub images
+        if ($request->hasFile('sub_images')) {
+            ItemImage::where('items_id', $item->id)->where('type',"sub")->delete(); 
+            foreach ($request->file('sub_images') as $file) {
+                $extension = $file->getClientOriginalExtension(); 
+                $subImageName = Str::random(40) . '_sub.' . $extension; 
+                $subImagePath = $file->storeAs('images/items', $subImageName, 'public');
+
+                //Log::debug('Sub Image Path: ' . $subImagePath);
+                
+                ItemImage::create([
+                    'name'          => $subImageName,
+                    'type'    => 'sub', 
+                    'items_id'      => $item->id
+                ]);
+            }
+        } else {
+            Log::debug('No sub images uploaded');
         }
         
         $employee_id = employee_id();
