@@ -40,7 +40,7 @@
                                         <tr class="even:bg-gray-50">
                                             <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-semibold text-gray-900">{{ ++$i }}</td>
                                             
-										<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $inventoryMaster->item->name }}</td>
+										<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ isset($inventoryMaster->item->name)?$inventoryMaster->item->name:"--" }}</td>
 										<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ in_array($inventoryMaster->in_out_type,array_keys($inOutTypes_Array))?$inOutTypes_Array[$inventoryMaster->in_out_type]:"--" }}</td>
 										<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $inventoryMaster->remark }}</td>
 										<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $inventoryMaster->qty }}</td>
