@@ -28,7 +28,7 @@
                         @foreach($items_lists as $key => $single_item)
                             <option value="{{ $single_item->id }}" data-rand-num="{{ $rand_num }}" data-qty="{{ $single_item->child_qty }}" data-unit="{{ $single_item->unit }}" data-discount="{{ $single_item->discount }}" data-rate="{{ $single_item->rate }}"  >{{ $single_item->name }}</option>
                         @endforeach
-                    </select>
+                    </select>   
                     <x-input-error class="mt-2" :messages="$errors->get('order_item_id')" />
                 </div>
                 <div class="mt-4">

@@ -311,6 +311,29 @@
                         <!-- Dropdown Menu End -->
                     </li>
 
+                    <li>
+                        <a @click.prevent="selected = (selected === 'inventory-masters' ? '':'inventory-masters')" class="menu-item group" href="#">
+                            <i class="fa fa-list"></i>
+                            <span :class="sidebarToggle ? 'lg:hidden' : ''" class="menu-item-text">
+                                Inventory Master
+                            </span>
+                            <svg :class="[(selected === 'inventory-masters') ? 'menu-item-arrow-active' : 'menu-item-arrow-inactive', sidebarToggle ? 'lg:hidden' : '' ]" class="menu-item-arrow absolute right-2.5 top-1/2 -translate-y-1/2 stroke-current" fill="none" height="20" viewbox="0 0 20 20" width="20" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M4.79175 7.39584L10.0001 12.6042L15.2084 7.39585" stroke="" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5">
+                                </path>
+                            </svg>
+                        </a>
+                        <!-- Dropdown Menu Start -->
+                        <div :class="(selected === 'inventory-masters') ? 'block' :'hidden'" class="overflow-hidden transform translate">
+                            <ul :class="sidebarToggle ? 'lg:hidden' : 'flex'" class="flex flex-col gap-1 mt-2 menu-dropdown pl-9">
+                                <li>
+                                    <a class="menu-dropdown-item group {{ Request::path() == 'admin/inventory-masters' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive' }}" href="{{ url('/admin/inventory-masters') }}">
+                                        Manage Inventory Master
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        <!-- Dropdown Menu End -->
+                    </li>
                     <!-- Menu Item Pages -->
                 </ul>
             </div>

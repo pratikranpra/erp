@@ -11,6 +11,7 @@ use App\Http\Controllers\EmployeeAdminItemConstroller;
 
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\GstMasterController;
+use App\Http\Controllers\InventoryMasterController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\ManageOrderController;
 use App\Http\Controllers\ManageOrderRequestController;
@@ -23,6 +24,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\VendorController;
 use App\Models\CustomerShippingAddress;
 use Illuminate\Support\Facades\Route;
+
 
 
 
@@ -119,9 +121,11 @@ Route::middleware('auth')->resource('/admin/items', ItemController::class);
 Route::middleware('auth')->resource('/admin/manage-orders', ManageOrderController::class);
 //Route::middleware('auth')->resource('/admin/manage-orders-request', ManageOrderController::class);
 Route::middleware('auth')->resource('/admin/gst-masters', GstMasterController::class);
+Route::middleware('auth')->resource('/admin/inventory-masters', InventoryMasterController::class);
 
 
 
+    
 // Employee Login
 Route::get('/emp_login', [App\Http\Controllers\Auth\EmployeeLoginController::class, 'showLoginForm'])->name('employee.login.form');
 Route::post('/emp_login', [App\Http\Controllers\Auth\EmployeeLoginController::class, 'login'])->name('employee.login');
