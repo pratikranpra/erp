@@ -45,6 +45,10 @@ class ManageOrder extends Model
     {
         return $this->belongsTo(\App\Models\Customer::class, 'customer_id', 'id');
     }
+    public function orderItems()
+    {
+        return $this->hasMany(\App\Models\OrderItemLists::class, 'order_id', 'id');
+    }
     public function getCustomerName()
     {
         // Check if parentCategory exists and return its name

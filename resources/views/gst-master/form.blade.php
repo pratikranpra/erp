@@ -22,6 +22,24 @@
             <x-input-error class="mt-2" :messages="$errors->get('gst_range_max')" />
         </div>
     </div>
+    <div class="flex gap-4">
+        <div class="flex-1 min-w-0">
+            <x-input-label for="gst_price_range_min" :value="__('Gst Price Range Min')" />
+            <x-text-input id="gst_price_range_min" name="gst_price_range_min" type="number" min="0" 
+            class="mt-1 block w-full"
+            :value="old('gst_price_range_min', $gstMaster?->gst_price_range_min)"
+            autocomplete="gst_price_range_min" placeholder="Gst Price Range" />
+            <x-input-error class="mt-2" :messages="$errors->get('gst_price_range_min')" />
+        </div>
+        <div class="flex-1 min-w-0">
+            <x-input-label for="gst_price_range_max" :value="__('Gst Price Range Max')" />
+            <x-text-input id="gst_price_range_max" name="gst_price_range_max" type="number" min="1" 
+            class="mt-1 block w-full"
+            :value="old('gst_price_range_max', $gstMaster?->gst_price_range_max)"
+            autocomplete="gst_price_range_max" placeholder="Gst Price Range" />
+            <x-input-error class="mt-2" :messages="$errors->get('gst_price_range_max')" />
+        </div>
+    </div>
     <div>
         <x-input-label for="gst_no" :value="__('Gst No')"/>
         <x-text-input id="gst_no" name="gst_no" type="text" class="mt-1 block w-full" :value="old('gst_no', $gstMaster?->gst_no)" autocomplete="gst_no" placeholder="Gst No"/>

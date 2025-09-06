@@ -29,6 +29,7 @@
                                         
 									<th scope="col" class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">Category Id</th>
 									<th scope="col" class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">Gst Range</th>
+									<th scope="col" class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">Gst Price Range</th>
 									<th scope="col" class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">Gst No</th>
 									<th scope="col" class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">Status</th>
 
@@ -42,6 +43,7 @@
                                             
 										<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $gstMaster->category?->name ?? 'N/A' }}</td>
 										<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $gstMaster->gst_range_min }} - {{ $gstMaster->gst_range_max }}</td>
+										<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $gstMaster->gst_price_range_min }} - {{ $gstMaster->gst_price_range_max }}</td>
 										<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $gstMaster->gst_no }}</td>
 										<td>
                                             <label class="inline-flex items-center cursor-pointer">

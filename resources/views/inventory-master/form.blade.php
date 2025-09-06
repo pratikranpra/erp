@@ -28,7 +28,7 @@
     </div>
     <div>
         <x-input-label for="qty" :value="__('Qty')"/>
-        <x-text-input id="qty" name="qty" type="text" class="mt-1 block w-full" :value="old('qty', $inventoryMaster?->qty)" autocomplete="qty" placeholder="Qty"/>
+        <x-text-input id="qty" name="qty" type="number"  min=0 class="mt-1 block w-full" :value="old('qty', $inventoryMaster?->qty)" autocomplete="qty" placeholder="Qty"/>
         <x-input-error class="mt-2" :messages="$errors->get('qty')"/>
     </div>
 

@@ -60,9 +60,12 @@
           <td class="text-right">
             <div class="title">Invoice</div>
             <div>ORDER #{{ $manageOrder->bill_no??"--" }}</div>
-            <div>Chalan No #{{ $manageOrder->chalan_no??"--" }}</div>
+            @if($manageOrder->chalan_no != null)
+              <div>Chalan No #{{ $manageOrder->chalan_no??"--" }}</div>
+            @endif
             <div>Order Date: {{ (date('F jS Y', strtotime($manageOrder->order_date))); }}</div>
             <div>Delivery Date: {{ (date('F jS Y', strtotime($manageOrder->delivery_date))); }}</div>
+            <div>Order Status: {{ ($manageOrder->status == 0)?"Pending":(($manageOrder->status == 1)?"Completed":"Cancelled") }}</div>
           </td>
         </tr>
       </table>

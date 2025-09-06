@@ -14,6 +14,8 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Log;
+use Barryvdh\DomPDF\Facade\Pdf as domPDF;
+
 
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
@@ -27,15 +29,80 @@ class ManageOrderController extends Controller
     public function index(Request $request): View
     {
         $employee_id = employee_id();
+        $customers = Customer::select("id","name")->where('status', '=','active')->get();
+        $query = ManageOrder::with('customerData')->orderBy('id', 'desc');
+
         if($employee_id > 0){
-            $manageOrders = ManageOrder::with('customerData')->where('employee_id', $employee_id)->orderBy('id', 'desc')->paginate();
+            $query->where('employee_id', $employee_id);
+            $items = Item::with('imageDetails')->where('employee_id','=',$employee_id)->orderBy('id', 'desc')->paginate();
         }else{
-            $manageOrders = ManageOrder::with('customerData')->orderBy('id', 'desc')->paginate();
+            $items = Item::with('imageDetails')->orderBy('id', 'desc')->paginate();
         }
-        return view('manage-order.index', compact('manageOrders'))
+
+        // Apply filters based on request parameters
+        if ($request->filled('customer_id')) {
+            $query->where('customer_id', $request->input('customer_id'));
+        }
+
+        if ($request->filled('from_date')) {
+            $query->whereDate('created_at', '>=', $request->input('from_date'));
+        }
+
+        if ($request->filled('to_date')) {
+            $query->whereDate('created_at', '<=', $request->input('to_date'));
+        }
+
+        if ($request->filled('item_id')) {
+            $itemId = $request->input('item_id');
+            $query->whereHas('orderItems', function ($q) use ($itemId) {
+                $q->where('order_item_id', $itemId);
+            });
+        }
+
+        $manageOrders = $query->paginate(10)->appends($request->except('page'));
+
+        return view('manage-order.index', compact('manageOrders','customers','items'))
             ->with('i', ($request->input('page', 1) - 1) * $manageOrders->perPage());
     }
 
+    public function postData(Request $request): View
+    {
+        $employee_id = employee_id();
+        $customers = Customer::select("id","name")->where('status', '=','active')->get();
+        $query = ManageOrder::with('customerData')->orderBy('id', 'desc');
+
+        if($employee_id > 0){
+            $query->where('employee_id', $employee_id);
+            $items = Item::with('imageDetails')->where('employee_id','=',$employee_id)->orderBy('id', 'desc')->paginate();
+        }else{
+            $items = Item::with('imageDetails')->orderBy('id', 'desc')->paginate();
+        }
+
+        // Apply filters based on request parameters
+        if ($request->filled('customer_id')) {
+            $query->where('customer_id', $request->input('customer_id'));
+        }
+
+        if ($request->filled('from_date')) {
+            $query->whereDate('created_at', '>=', $request->input('from_date'));
+        }
+
+        if ($request->filled('to_date')) {
+            $query->whereDate('created_at', '<=', $request->input('to_date'));
+        }
+
+        if ($request->filled('item_id')) {
+            $itemId = $request->input('item_id');
+            $query->whereHas('orderItems', function ($q) use ($itemId) {
+                $q->where('order_item_id', $itemId);
+            });
+        }
+
+        $manageOrders = $query->paginate(10)->appends($request->except('page'));
+
+        return view('manage-order.index', compact('manageOrders','customers','items'))
+            ->with('i', ($request->input('page', 1) - 1) * $manageOrders->perPage());
+    }
     /**
      * Show the form for creating a new resource.
      */
@@ -48,11 +115,12 @@ class ManageOrderController extends Controller
         $shopping_mode = [ 1 => 'Air', 2 => 'Road', 3 => 'Transport',4=>"Other"];
         $rand_num = rand(1000, 9999);
         if($employee_id > 0){
-            $items_lists = Item::with('imageDetails')->where('employee_id','=',$employee_id)->orderBy('id', 'desc')->paginate();
+            $items_lists = Item::with('imageDetails','unitDetail')->where('employee_id','=',$employee_id)->orderBy('id', 'desc')->paginate();
         }else{
             // For admin or other users, show all items
-            $items_lists = Item::with('imageDetails')->orderBy('id', 'desc')->paginate();
+            $items_lists = Item::with('imageDetails','unitDetail')->orderBy('id', 'desc')->paginate();
         }
+        
         return view('manage-order.create', compact('manageOrder','all_customer','product_type','shopping_mode','items_lists','rand_num'));
     }
 
@@ -148,9 +216,10 @@ class ManageOrderController extends Controller
         $orderItemLists = OrderItemLists::where('order_id', $id)
                             ->leftjoin('items', 'order_item_lists.order_item_id', '=', 'items.id')
                             ->leftjoin('vendors', 'vendors.id', '=', 'order_item_lists.vendor_id')
-                            ->select('order_item_lists.*', 'items.name as item_name',"vendors.name as vendor_name")
+                            ->leftjoin('units', 'units.id', '=', 'order_item_lists.order_item_unit')
+                            ->select('order_item_lists.*', 'items.name as item_name',"vendors.name as vendor_name","units.name as unit_name")
                             ->get();
-
+        //dd($orderItemLists);
         return view('manage-order.show', compact('manageOrder','orderItemLists'));
     }
 
@@ -214,5 +283,17 @@ class ManageOrderController extends Controller
             'message' => '',
             'data'    => $html
         ]);
+    }
+    public function downloadOrderInvoice(Request $request,$id)
+    {
+        $manageOrder = ManageOrder::with('shippingAddess')->find($id);
+        $orderItemLists = OrderItemLists::where('order_id', $id)
+                            ->leftjoin('items', 'order_item_lists.order_item_id', '=', 'items.id')
+                            ->select('order_item_lists.*', 'items.name as item_name')
+                            ->get();
+                            
+        $pdf = domPDF::loadView('manage-order.order_invoice_download', compact('manageOrder', 'orderItemLists'));
+        //$pdf->setPaper('A4', 'portrait');   
+        return $pdf->download('order_invoice_'.$manageOrder->id."_".time().'.pdf');
     }
 }

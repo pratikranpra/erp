@@ -52,6 +52,7 @@
                                                     <th class="px-4 py-2 text-left font-semibold text-gray-900">Delivery Date</th>
                                                     <th class="px-4 py-2 text-left font-semibold text-gray-900">Vendor Name</th>
                                                     <th class="px-4 py-2 text-left font-semibold text-gray-900">Item Custom Data</th>
+                                                    <th class="px-4 py-2 text-left font-semibold text-gray-900">Status</th>
                                                 </tr>
                                             </thead>
                                             <tbody class="bg-white divide-y divide-gray-100">
@@ -60,7 +61,7 @@
                                                     <td class="px-4 py-2">{{  $key + 1 }}</td>
                                                     <td class="px-4 py-2">{{ ucfirst($single_order_item->item_name) }}</td>
                                                     <td class="px-4 py-2">{{ $single_order_item->order_item_qty }}</td>
-                                                    <td class="px-4 py-2">{{ $single_order_item->order_item_unit }}</td>
+                                                    <td class="px-4 py-2">{{ $single_order_item->unit_name }}</td>
                                                     <td class="px-4 py-2">{{ $single_order_item->order_item_rate }}</td>
                                                     <td class="px-4 py-2">{{ $single_order_item->order_item_disc }}</td>
                                                     <td class="px-4 py-2">{{ date("Y-m-d",strtotime($single_order_item->delivery_date)) }}</td>
@@ -75,6 +76,7 @@
                                                             @endforeach
                                                         </ul>
                                                     </td>
+                                                    <td class="px-4 py-2">{{ $single_order_item->status == 0?"Pending":"Completed" }}</td>
                                                 </tr>  
                                                 @endforeach
                                                 
@@ -87,10 +89,10 @@
                                     <dt class="text-sm font-medium leading-6 text-gray-900">Order Date</dt>
                                     <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{{ $manageOrder->order_date }}</dd>
                                 </div>
-                                <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                                <!-- <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                                     <dt class="text-sm font-medium leading-6 text-gray-900">Delivery Date</dt>
                                     <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{{ $manageOrder->delivery_date }}</dd>
-                                </div>
+                                </div> -->
                                 <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                                     <dt class="text-sm font-medium leading-6 text-gray-900">Remark</dt>
                                     <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{{ $manageOrder->remark }}</dd>
@@ -100,7 +102,7 @@
                                     <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{{ $manageOrder->product_type == 1?"Manufacture":"ReadyMade" }}</dd>
                                 </div> -->
                                 <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                                    <dt class="text-sm font-medium leading-6 text-gray-900">Shipping Address Id</dt>
+                                    <dt class="text-sm font-medium leading-6 text-gray-900">Shipping Address</dt>
                                     <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{{ $manageOrder->getShippingAddress() }}</dd>
                                 </div>
                                 <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">

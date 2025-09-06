@@ -17,6 +17,7 @@ class OrderItemLists extends Model
         'vendor_id',
         'delivery_date',
         'order_item_custom_data',
+        'status',
     ];
     protected $table = 'order_item_lists';
 

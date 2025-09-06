@@ -4,7 +4,7 @@
         <select name="order_item_id[{{$rand_num}}][]" data-rand-id="{{$rand_num}}"  class="w-full border-gray-300 order_item_id rounded-md shadow-sm mt-1">
             <option value="">Select Item</option>
             @foreach($items as $key => $single_item)
-                <option value="{{ $single_item->id }}" data-rand-num="{{ $rand_num }}" data-qty="{{ $single_item->child_qty }}" data-unit="{{ $single_item->unit }}" data-discount="{{ $single_item->discount }}" data-rate="{{ $single_item->rate }}"  >{{ $single_item->name }}</option>
+                <option value="{{ $single_item->id }}" data-rand-num="{{ $rand_num }}" data-qty="{{ $single_item->child_qty }}" data-unit="{{ $single_item->unit }}" data-discount="{{ $single_item->discount }}" data-rate="{{ $single_item->rate }}" data-unit-name="{{ $single_item->unitDetail->name??'--' }}"   >{{ $single_item->name }}</option>
             @endforeach
         </select>
         <x-input-error class="mt-2" :messages="$errors->get('order_item_id')" />
@@ -16,7 +16,8 @@
     </div>
     <div class="mt-4">
         <x-input-label for="order_item_unit" :value="__('Order Item Unit')" />
-        <x-text-input name="order_item_unit[{{$rand_num}}][]" type="number"  class="mt-1 block w-full order_item_unit_{{$rand_num}}" placeholder="Unit" />
+        <input name="order_item_unit[{{$rand_num}}][]" type="hidden"  class="mt-1 block w-full order_item_unit_{{$rand_num}}" placeholder="Unit" />
+        <x-text-input name="order_item_unit_name_[{{$rand_num}}][]" type="text" readonly class="mt-1 block w-full order_item_unit_name_{{$rand_num}}" placeholder="Unit" />
         <x-input-error class="mt-2" :messages="$errors->get('order_item_unit')" />
     </div>
     <div class="mt-4">

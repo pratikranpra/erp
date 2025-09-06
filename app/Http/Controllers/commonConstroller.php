@@ -49,9 +49,9 @@ class commonConstroller extends Controller
     {   
         $employee_id = employee_id();
         if($employee_id > 0){
-            $items = Item::query()->select('id','child_qty','rate','unit','discount','name')->where('employee_id','=',$employee_id)->where('status', 'active')->get();
+            $items = Item::with('unitDetail')->select('id','child_qty','rate','unit','discount','name')->where('employee_id','=',$employee_id)->where('status', 'active')->get();
         }else{
-            $items =Item::query()->select('id','child_qty','rate','unit','discount','name')->where('status', 'active')->get();
+            $items =Item::with('unitDetail')->select('id','child_qty','rate','unit','discount','name')->where('status', 'active')->get();
         }
         $rand_num = rand(1000, 9999);
         $html = view('manage-order.item_form',compact('items','rand_num'))->render(); // Renders the view into HTML

@@ -30,7 +30,7 @@ class GstMaster extends Model
      *
      * @var array<int, string>
      */
-    protected $fillable = ['category_id', 'gst_range_min', 'gst_range_max', 'gst_no', 'status'];
+    protected $fillable = ['category_id', 'gst_range_min', 'gst_range_max','gst_price_range_min', 'gst_price_range_max', 'gst_no', 'status'];
 
 
     /**

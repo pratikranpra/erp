@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>Billing Invoice</title>
+  <title>{{  $in_out_type_text_display??"N/A" }}</title>
   <style>
     body {
       font-family: DejaVu Sans, sans-serif;
@@ -59,14 +59,13 @@
           </td>
           <td class="text-right">
             <div class="title">Invoice</div>
-            <div>ORDER #{{ $manageOrder->bill_no??"--" }}</div>
-            <div>Chalan No #{{ $manageOrder->chalan_no??"--" }}</div>
-            <div>Order Date: {{ (date('F jS Y', strtotime($manageOrder->order_date))); }}</div>
-            <div>Delivery Date: {{ (date('F jS Y', strtotime($manageOrder->delivery_date))); }}</div>
+            <div>ORDER #{{ $inventory_data->id }}</div>
+            <div>Date: {{ (date('F jS Y', strtotime($inventory_data->order_date))); }}</div>
+            <div>Address: 20 Cooper Square, New York, NY 10003, USA</div>
           </td>
         </tr>
       </table>
-      <p>Hello, {{ $manageOrder->getCustomerName() }}. Thank you for shopping from our store and for your order.</p>
+      <p>Hello, Dear</p>
     </div>
 
     <div class="section">
@@ -77,8 +76,6 @@
             <th>Item</th>
             <th>Item Rate</th>
             <th>Quantity</th>
-            <th>Delivery Date</th>
-            <th>Item Custom Data</th>
             <th class="text-right">Subtotal</th>
           </tr>
         </thead>
@@ -91,26 +88,17 @@
             <td class="text-right">$299.95</td>
           </tr> -->
           @php $total = 0 @endphp
-          @foreach ($orderItemLists  as $key=>$single_order_item) 
+          @foreach ($item_data  as $key=>$single_item) 
+          @php $single_total = 0; @endphp
             <tr>
-              <td >{{ ucfirst($single_order_item->item_name) }}</td>
-              <td class="text-right">{{ "₹".$single_order_item->order_item_rate }}</td>
-              <td >{{ $single_order_item->order_item_qty }}</td>
-              <td >{{ date("Y-m-d",strtotime($single_order_item->delivery_date)) }}</td>
-              <td >
+              <td >{{ ucfirst($single_item->name) }}</td>
+              <td class="text-right">{{ "₹".$single_item->rate }}</td>
+              <td >{{ $inventory_data->qty }}</td>
+              
               @php
-                  $total = $total + ($single_order_item->order_item_rate * $single_order_item->order_item_qty);
-                  $single_total =  ($single_order_item->order_item_rate * $single_order_item->order_item_qty);
-                  $attributes = json_decode($single_order_item->order_item_custom_data, true); 
-                  @endphp
-                  <ul>
-                      @foreach($attributes as $attribute)
-                          @foreach($attribute as $key => $value)
-                              <li><strong>{{ ucfirst(strtolower($key)) }}</strong>: {{ $value }}</li>
-                          @endforeach
-                      @endforeach
-                  </ul>
-              </td>
+                  $total = $total + ($single_item->rate * $inventory_data->qty);
+                  $single_total =  ($single_item->rate * $inventory_data->qty);
+              @endphp
               <td class="text-right">{{  "₹".$single_total }}</td>
           </tr>  
           @endforeach
@@ -126,12 +114,12 @@
           <td class="text-right">{{ "₹".$total }}</td>
         </tr>
         <tr>
-          <td class="text-right">Shipping & Handling</td>
-          <td class="text-right">{{  "₹".$manageOrder->charge }}</td>
+          <td class="text-right">Vat Tax</td>
+          <td class="text-right">{{  "₹. 0.0" }}</td>
         </tr>
         <tr>
           <td class="text-right"><strong>Grand Total (Incl. Tax)</strong></td>
-          <td class="text-right"><strong>{{ "₹".$total +  $manageOrder->charge }}</strong></td>
+          <td class="text-right"><strong>{{ "₹".$total }}</strong></td>
         </tr>
       </table>
     </div>
@@ -139,12 +127,8 @@
       <table width="100%">
         <tr>
           <td>
-            <strong>Shipping Information :</strong>
-            <br>{{ $manageOrder->getShippingAddress() }}
-          </td>
-          <td>
-            <strong>Shipping Method</strong><br>
-            {{ ($manageOrder->shopping_mode == 1)?"Air":(($manageOrder->shopping_mode == 2)?"Road":(($manageOrder->shopping_mode == 3)?"Transport":"Other"))  }}
+            <strong>Invoice Type :</strong>
+            <br>{{ $in_out_type_text_display??"N/A" }}
           </td>
         </tr>
       </table>

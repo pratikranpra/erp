@@ -51,19 +51,52 @@ class ManageOrderRequestController extends Controller
     {
         $order_id = $request->order_id > 0 ? $request->order_id : 0;
         $bill_no = $request->bill_no > 0 ? $request->bill_no : 0;
-
+        $chalan_no = "cln-".time();
         $orderItems = OrderItemLists::with('item')
         ->where('order_id', $order_id)
         ->get();
 
         foreach ($orderItems as $orderItem) {
             $orderItem->item->decrement('child_qty', $orderItem->order_item_qty);
+            $orderItem->update(['status' => 1]);
         }
 
-        $completeOrder = ManageOrder::where('id', $order_id)->update(['status' => 1,'bill_no' => $bill_no]);
+        $completeOrder = ManageOrder::where('id', $order_id)->update(['status' => 1,'bill_no' => "bill-".$bill_no,'chalan_no' =>$chalan_no]);
         $pfdDownloadBtn = '<a href="'.route('admin.download-purchase-bill.pdf',$order_id).'" data-orderid="'.$order_id.'" class="bg-[#007bff] hover:bg-gray-100 text-white p-2 donwloadPurchaseBill">'.__('Purchase Bill').'</a>';
         return response()->json([ 'status' => 'success', 'message' =>"Order Completed Successfully",'data'=>$pfdDownloadBtn ]);
     }
+
+    public function completeChildOrder(Request $request)
+    {
+        $childOrderId = (int) ($request->child_order_id ?? 0);
+        $lastOrder    = (int) ($request->last_order ?? 0);
+        $billNo       = $request->bill_no ?? null; // allow string bill numbers
+        $chalanNo     = "cln-" . time();
+
+        $orderItem = OrderItemLists::with('item')->find($childOrderId);
+        
+        if ($orderItem && $orderItem->item) {
+            // Safely decrement item quantity
+            $orderItem->item->decrement('child_qty', $orderItem->order_item_qty);
+            // If it's the last order, update the main order status
+            if ($lastOrder) {
+                ManageOrder::where('id', $orderItem->order_id)->update(['status' => 1,'bill_no' => "bill-".$billNo,'chalan_no' =>$chalanNo]);
+            }
+            // Update order item status
+            $orderItem->update(['status' => 1]);
+            return response()->json([
+                'status'  => 'success',
+                'message' => "Order Completed Successfully"
+            ]);
+        }
+
+        return response()->json([
+            'status'  => 'error',
+            'message' => "Order not found or invalid item"
+        ], 404);
+
+    }
+
     public function downloadPurchaseBill(Request $request,$id)
     {
         $manageOrder = ManageOrder::with('shippingAddess')->find($id);

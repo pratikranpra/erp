@@ -79,6 +79,7 @@ class GstMasterController extends Controller
      */
     public function update(GstMasterRequest $request, GstMaster $gstMaster): RedirectResponse
     {
+        //dd($request->all());
         $gstMaster->update($request->validated());
 
         return Redirect::route('gst-masters.index')

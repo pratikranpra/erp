@@ -56,14 +56,16 @@
                 var selectedOption = $(this).find('option:selected');
                 var randNum = selectedOption.data('rand-num');
                 var unit = selectedOption.data('unit');
+                var unit_name = selectedOption.data('unit-name');
                 var discount = selectedOption.data('discount');
                 var qty = selectedOption.data('qty');
                 var rate = selectedOption.data('rate');
-                    
+                 
                 $('.order_item_qty_' + randNum).val(qty); // Default quantity
                 $('.order_item_unit_' + randNum).val(unit);
                 $('.order_item_rate_' + randNum).val(rate);
                 $('.order_item_discount_' + randNum).val(discount);
+                $('.order_item_unit_name_' + randNum).val(unit_name);
             });
 
             $(document).on("click", ".add_more", function() {    

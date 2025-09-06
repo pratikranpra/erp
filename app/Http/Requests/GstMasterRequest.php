@@ -22,10 +22,12 @@ class GstMasterRequest extends FormRequest
     public function rules(): array
     {
         return [
-			'category_id' => 'required',
-			'gst_range_min' => 'required|string',
-            'gst_range_max' => 'required|string',
-			'gst_no' => 'required|string',
+			'category_id'           => 'required',
+            'gst_range_min'         => 'required|integer|min:0|lte:gst_range_max',
+            'gst_range_max'         => 'required|integer|min:0|gte:gst_range_min',
+            'gst_price_range_min'   => 'required|integer|min:0|lte:gst_price_range_max',
+            'gst_price_range_max'   => 'required|integer|min:0|gte:gst_price_range_min',
+            'gst_no'                => 'required|string',
         ];
     }
 }

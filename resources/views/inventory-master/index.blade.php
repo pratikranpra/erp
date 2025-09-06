@@ -19,6 +19,42 @@
                         </div>
                     </div>
 
+                    <div class="mt-6">
+                        <form name="filter" method="get" action="{{ route('inventory-masters.index') }}" class="flex flex-wrap gap-4">
+                            <!-- From Date -->
+                            <div class="w-56">
+                                <label for="from_date" class="block text-sm font-medium text-gray-700">From Date</label>
+                                <x-text-input id="from_date" name="from_date" type="text"
+                                    class="mt-1 block w-full date_picker_cls from_date"
+                                    value="{{ request('from_date') }}"
+                                    autocomplete="off"
+                                    placeholder="Select Date" />
+                            </div>
+
+                            <!-- To Date -->
+                            <div class="w-56">
+                                <label for="to_date" class="block text-sm font-medium text-gray-700">To Date</label>
+                                <x-text-input id="to_date" name="to_date" type="text"
+                                    class="mt-1 block w-full date_picker_cls to_date"
+                                    value="{{ request('to_date') }}"
+                                    autocomplete="off"
+                                    placeholder="Select Date" />
+                            </div>
+
+                            <!-- Buttons Row -->
+                            <div class="w-full flex gap-2 mt-4">
+                                <button type="submit"
+                                    class="inline-flex items-center px-4 py-2 rounded-md bg-indigo-600 text-white font-semibold shadow-sm hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-600">
+                                    Search
+                                </button>
+                                <a href="{{ route('inventory-masters.index') }}"
+                                    class="inline-flex items-center px-4 py-2 rounded-md bg-gray-500 text-white font-semibold shadow-sm hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-600">
+                                    Clear
+                                </a>
+                            </div>
+                        </form>
+                    </div>
+
                     <div class="flow-root">
                         <div class="mt-8 overflow-x-auto">
                             <div class="inline-block min-w-full py-2 align-middle">
@@ -47,6 +83,9 @@
 
                                             <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900">
                                                 <form action="{{ route('inventory-masters.destroy', $inventoryMaster->id) }}" method="POST">
+                                                    @if(in_array($inventoryMaster->in_out_type,[2,7,8]))
+                                                        <a href="{{ route('admin.download-purchase-invoide.pdf', $inventoryMaster->id) }}" class="text-blue-700 font-bold hover:text-blue-800 mr-2">{{ __('Download Invoice') }}</a>
+                                                    @endif
                                                     <a href="{{ route('inventory-masters.show', $inventoryMaster->id) }}" class="text-gray-600 font-bold hover:text-gray-900 mr-2">{{ __('Show') }}</a>
                                                     <a href="{{ route('inventory-masters.edit', $inventoryMaster->id) }}" class="text-indigo-600 font-bold hover:text-indigo-900  mr-2">{{ __('Edit') }}</a>
                                                     @csrf
@@ -69,4 +108,32 @@
             </div>
         </div>
     </div>
+    @push('scripts')
+    <script type="text/javascript">
+        $(document).ready(function(){
+            const fromDate = flatpickr(".from_date", {
+                enableTime: false,
+                dateFormat: "Y-m-d",
+                altInput: false,
+                altFormat: "F j, Y",
+                //minDate: "today",
+                onChange: function (selectedDates) {
+                    if (selectedDates.length > 0) {
+                        // Set minDate of to_date as the next day
+                        toDate.set("minDate", new Date(selectedDates[0].getTime() + 86400000));
+                    }
+                }
+            });
+
+            const toDate = flatpickr(".to_date", {
+                enableTime: false,
+                dateFormat: "Y-m-d",
+                altInput: false,
+                altFormat: "F j, Y",
+                minDate: "today"
+            });
+
+        })
+    </script>
+    @endpush
 </x-app-layout>

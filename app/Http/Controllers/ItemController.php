@@ -27,8 +27,19 @@ class ItemController extends Controller
     public function index(Request $request): View
     {
         $employee_id = employee_id();
+        $item_id = $request->item_id > 0 ? $request->item_id : 0;
+        
         if($employee_id > 0){
             $items = Item::with(['imageDetails' => function($query) {
+                $query->where('type','=','main')
+                    ->orderBy('id', 'asc');  
+            }])
+            ->where('employee_id','=',$employee_id);
+            if($item_id > 0){
+                $items = $items->where('id','=',$item_id);
+            }
+            //$items = $items->orderBy('id', 'desc')->paginate();
+            $items_all = Item::with(['imageDetails' => function($query) {
                 $query->where('type','=','main')
                     ->orderBy('id', 'asc');  
             }])
@@ -38,12 +49,81 @@ class ItemController extends Controller
             $items = Item::with(['imageDetails' => function($query) {
                 $query->where('type','=','main')
                     ->orderBy('id', 'asc');  
-            }])->orderBy('id', 'desc')->paginate();
+            }]);
+            if($item_id > 0){
+                $items = $items->where('id','=',$item_id);
+            }
+           // $items = $items->orderBy('id', 'desc')->paginate();
+           $items_all = Item::with(['imageDetails' => function($query) {
+                $query->where('type','=','main')
+                    ->orderBy('id', 'asc');  
+            }])
+            ->orderBy('id', 'desc')->paginate();
         }
-        return view('item.index', compact('items'))
+        if ($request->filled('from_date')) {
+            $items->whereDate('created_at', '>=', $request->input('from_date'));
+        }
+
+        if ($request->filled('to_date')) {
+            $items->whereDate('created_at', '<=', $request->input('to_date'));
+        }
+        $items = $items->orderBy('id', 'desc')->paginate();
+        return view('item.index', compact('items','employee_id','items_all'))
             ->with('i', ($request->input('page', 1) - 1) * $items->perPage());
+        // $employee_id = employee_id();
+        // if($employee_id > 0){
+        //     $items = Item::with(['imageDetails' => function($query) {
+        //         $query->where('type','=','main')
+        //             ->orderBy('id', 'asc');  
+        //     }])
+        //     ->where('employee_id','=',$employee_id)->orderBy('id', 'desc')->paginate();
+        // }else{
+        //     // For admin or other users, show all items
+        //     $items = Item::with(['imageDetails' => function($query) {
+        //         $query->where('type','=','main')
+        //             ->orderBy('id', 'asc');  
+        //     }])->orderBy('id', 'desc')->paginate();
+        // }
+        // return view('item.index', compact('items'))
+        //     ->with('i', ($request->input('page', 1) - 1) * $items->perPage());
     }
 
+    public function postItemData(Request $request): View
+    {
+        $employee_id = employee_id();
+        $item_id = $request->item_id > 0 ? $request->item_id : 0;
+        if($employee_id > 0){
+            $items = Item::with(['imageDetails' => function($query) {
+                $query->where('type','=','main')
+                    ->orderBy('id', 'asc');  
+            }])
+            ->where('employee_id','=',$employee_id);
+            if($item_id > 0){
+                $items = $items->where('id','=',$item_id);
+            }
+            //$items = $items->orderBy('id', 'desc')->paginate();
+        }else{
+            // For admin or other users, show all items
+            $items = Item::with(['imageDetails' => function($query) {
+                $query->where('type','=','main')
+                    ->orderBy('id', 'asc');  
+            }]);
+            if($item_id > 0){
+                $items = $items->where('id','=',$item_id);
+            }
+           // $items = $items->orderBy('id', 'desc')->paginate();
+        }
+        if ($request->filled('from_date')) {
+            $items->whereDate('created_at', '>=', $request->input('from_date'));
+        }
+
+        if ($request->filled('to_date')) {
+            $items->whereDate('created_at', '<=', $request->input('to_date'));
+        }
+        $items = $items->orderBy('id', 'desc')->paginate();
+        return view('item.index', compact('items','employee_id'))
+            ->with('i', ($request->input('page', 1) - 1) * $items->perPage());
+    }
     /**
      * Show the form for creating a new resource.
      */

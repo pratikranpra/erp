@@ -65,22 +65,33 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => 'auth'], fu
 
     });
 
-    Route::group(['prefix' => 'items'], function () {
+    Route::group(['prefix' => 'items','as' => ''], function () {
+       //Route::match(['get', 'post'], '/', [ItemController::class, 'index'])->name('items.index');
+        
+        Route::any('/', [ItemController::class, 'index'])->name('items.index');
+        Route::any('/postItemData', [ItemController::class, 'postItemData'])->name('postItemData');
         Route::post('/load-item-type-data', [ItemController::class, 'loadItemTypeData'])->name('load.item.type.data');
         Route::post('/load-sub-category-data', [ItemController::class, 'loadSubCategoryData'])->name('load.sub.category.data');
         Route::get('/download-pdf', [ItemController::class, 'downloadPDF'])->name('items.download.pdf');
     });
+    
 
     Route::group(['prefix' => 'manage-orders'], function () {
+        Route::post('/postData', [ManageOrderController::class, 'postData'])->name('postData');
         Route::post('/customer-billing-address', [ManageOrderController::class, 'customerBillingAddress'])->name('customer.billing.address');
         Route::post('/load-more-item-data', [ManageOrderController::class, 'loadMoreItemData'])->name('load.more.item.data');
         Route::post('/load-vendor-data', [ManageOrderController::class, 'loadVendorData'])->name('load.vendor.data');
+        Route::get('/download-order-invoice/{id}', [ManageOrderController::class, 'downloadOrderInvoice'])->name('download-order-invoice.pdf');
     });
     Route::group(['prefix' => 'manage-orders-request'], function () {
         Route::get('/', [ManageOrderRequestController::class, 'index'])->name('manage.orders.request.index');
         Route::get('/show/{id}', [ManageOrderRequestController::class, 'show'])->name('manage.orders.request.show');
         Route::post('/manage-orders-request-complete', [ManageOrderRequestController::class, 'completeOrder'])->name('manage.orders.request.complete');
+        Route::post('/manage-orders-request-child-complete', [ManageOrderRequestController::class, 'completeChildOrder'])->name('manage.orders.request.child.complete');
         Route::get('/download-purchase-bill/{id}', [ManageOrderRequestController::class, 'downloadPurchaseBill'])->name('download-purchase-bill.pdf');
+    }); 
+     Route::group(['prefix' => 'inventory-masters'], function () {
+        Route::get('/download-invoice/{id}', [InventoryMasterController::class, 'downloadPurchaseInvoice'])->name('download-purchase-invoide.pdf');
     }); 
 
     Route::group([
@@ -169,6 +180,7 @@ Route::prefix('employee')->group(function () {
         //Route::post('/status/manage-orders', [ManageOrderController::class, 'status'])->name('employee.manage-orders.status');
         Route::group(['prefix' => 'manage-orders'], function () {
             Route::get('/create', [ManageOrderController::class, 'create'])->name('employee.manage-orders.create');
+            Route::post('/postData', [ManageOrderController::class, 'postData'])->name('employee.manage-orders.postData');
             Route::post('/store', [ManageOrderController::class, 'store'])->name('employee.manage-orders.store');
             Route::get('/show/{id}', [ManageOrderController::class, 'show'])->name('employee.manage-orders.show');    
             //Route::get('/{id}/edit', [ManageOrderController::class, 'edit'])->name('employee.manage-orders.edit');

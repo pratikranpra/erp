@@ -31,7 +31,11 @@
                                 </div>
                                 <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                                     <dt class="text-sm font-medium leading-6 text-gray-900">Gst Range</dt>
-                                    <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{{ $gstMaster->gst_range }}</dd>
+                                    <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{{ ($gstMaster->gst_range_min > 0?$gstMaster->gst_range_min:"--" )." - ".($gstMaster->gst_range_max > 0?$gstMaster->gst_range_max:"--") }}</dd>
+                                </div>
+                                <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                                    <dt class="text-sm font-medium leading-6 text-gray-900">Gst Price Range</dt>
+                                    <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{{ ($gstMaster->gst_price_range_min > 0?$gstMaster->gst_price_range_min:"--" )." - ".($gstMaster->gst_price_range_max > 0?$gstMaster->gst_price_range_max:"--") }}</dd>
                                 </div>
                                 <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                                     <dt class="text-sm font-medium leading-6 text-gray-900">Gst No</dt>
