@@ -90,7 +90,7 @@
                                                             @if($single_order_item->status == 0)
                                                             @php $cnt++; @endphp
                                                             <td class="px-4 py-2 child_order_status_{{ $single_order_item->id}} ">
-                                                                <a href="javascript:void(0)" data-child-orderid="{{ $single_order_item->id }}" class="bg-[#218838]  text-white p-2 completeChildOrderBtn_{{ $single_order_item->id }} completeChildOrderBtn">Compelete Order</a>
+                                                                <a href="javascript:void(0)" data-child-orderid="{{ $single_order_item->id }}" class="bg-[#218838]  text-white p-2 completeChildOrderBtn_{{ $single_order_item->id }} completeChildOrderBtn">Compelete</a>
                                                             </td>
                                                             @else
                                                             <td class="px-4 py-2">Completed</td>
