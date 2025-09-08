@@ -33,13 +33,13 @@
                 </div>
                 <div class="mt-4">
                     <x-input-label for="order_item_qty" :value="__('Order Item Qty')" />
-                    <x-text-input name="order_item_qty[{{$rand_num}}][]" type="number"  class="mt-1 block w-full order_item_qty_{{$rand_num}}" placeholder="Qty" />
+                    <x-text-input name="order_item_qty[{{$rand_num}}][]" type="number"  min=1  class="mt-1 block w-full order_item_qty_{{$rand_num}}" placeholder="Qty" />
                     <x-input-error class="mt-2" :messages="$errors->get('order_item_qty')" />
                 </div>
                 <div class="mt-4">
-                    <x-input-label for="order_item_unit" id="unit_name_{{$rand_num}}" :value="__('Order Item Unit')" />
+                    <x-input-label for="order_item_unit" id="unit_name_{{$rand_num}}" :value="__('Order Item Unit')" /> : <b><span for="order_item_unit_name" class="order_item_unit_name_{{$rand_num}}" >--</span></b>
                     <input name="order_item_unit[{{$rand_num}}][]" type="hidden"  class="mt-1 block w-full order_item_unit_{{$rand_num}}" placeholder="Unit" />
-                    <x-text-input name="order_item_unit_name[{{$rand_num}}][]" type="text" readonly  class="mt-1 block w-full order_item_unit_name_{{$rand_num}}" placeholder="Unit" />
+                    
                     <x-input-error class="mt-2" :messages="$errors->get('order_item_unit')" />
                 </div>
                 <div class="mt-4">

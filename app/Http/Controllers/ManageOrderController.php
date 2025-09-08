@@ -129,7 +129,7 @@ class ManageOrderController extends Controller
      */
     public function store(ManageOrderRequest $request): RedirectResponse
     {
-        //dd($request->all());
+        
         $order_item_id = request('order_item_id');
         $order_item_qty = request('order_item_qty');
         $order_item_unit = request('order_item_unit');
@@ -144,10 +144,11 @@ class ManageOrderController extends Controller
         
        try{
             $data = $request->validated();
-
+            
             $data = Arr::except($data, ['shipping_address_id','delivery_date']);
-
+            
             $manageorders =  ManageOrder::create($data);
+            
             $employee_id = employee_id();
             $order_id = $manageorders->id;
             $manageorders->employee_id = $employee_id;
@@ -192,6 +193,7 @@ class ManageOrderController extends Controller
                         'delivery_date' => ($order_delivery_date[$key][0]) ?? 0,
                         'order_item_custom_data' => json_encode($custom_data),
                     ];
+                   
                     OrderItemLists::create($data);
                     $cnt++;
                 }

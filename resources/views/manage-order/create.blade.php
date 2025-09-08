@@ -1,4 +1,4 @@
-<x-app-layout>
+<x-app-layout :title="__('Add Order')">
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
             {{ __('Create') }} Manage Order
@@ -61,11 +61,12 @@
                 var qty = selectedOption.data('qty');
                 var rate = selectedOption.data('rate');
                  
-                $('.order_item_qty_' + randNum).val(qty); // Default quantity
+                $('.order_item_qty_' + randNum).val(0); // Default quantity
                 $('.order_item_unit_' + randNum).val(unit);
                 $('.order_item_rate_' + randNum).val(rate);
                 $('.order_item_discount_' + randNum).val(discount);
                 $('.order_item_unit_name_' + randNum).val(unit_name);
+                $('.order_item_unit_name_' + randNum).html(unit_name);
             });
 
             $(document).on("click", ".add_more", function() {    

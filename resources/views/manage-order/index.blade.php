@@ -1,4 +1,4 @@
-<x-app-layout>
+<x-app-layout :title="__('Manage Order')">
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
             {{ __('Manage Orders') }}
@@ -123,7 +123,7 @@
 
                                             <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900">
                                                 <form action="{{ route('manage-orders.destroy', $manageOrder->id) }}" method="POST">
-                                                    <a href="{{ route('admin.download-order-invoice.pdf', $manageOrder->id) }}" target="_blank" data-orderid="{{$manageOrder->id}}" class="text-gray-600 font-bold hover:text-gray-900 mr-2 donwloadPurchaseBill">{{ __('Invoice Download') }}</a>
+                                                    <a href="{{ route('admin.download-order-invoice.pdf', $manageOrder->id) }}" target="_blank" data-orderid="{{$manageOrder->id}}" class="bg-[#007bff]  text-white p-2 mr-2 donwloadPurchaseBill">{{ __('Invoice Download') }}</a>
                                                     <a href="{{ (Auth::guard('employee')->check())? route('employee.manage-orders.show', $manageOrder->id): route('manage-orders.show', $manageOrder->id) }}" class="text-gray-600 font-bold hover:text-gray-900 mr-2">{{ __('Show') }}</a>
                                                     <!-- <a href="{{ route('manage-orders.edit', $manageOrder->id) }}" class="text-indigo-600 font-bold hover:text-indigo-900  mr-2">{{ __('Edit') }}</a> -->
                                                     @csrf

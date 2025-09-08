@@ -1,4 +1,4 @@
-<x-app-layout>
+<x-app-layout :title="__('Manage Inventory')">
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
             {{ __('Inventory Masters') }}
@@ -84,10 +84,10 @@
                                             <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900">
                                                 <form action="{{ route('inventory-masters.destroy', $inventoryMaster->id) }}" method="POST">
                                                     @if(in_array($inventoryMaster->in_out_type,[2,7,8]))
-                                                        <a href="{{ route('admin.download-purchase-invoide.pdf', $inventoryMaster->id) }}" class="text-blue-700 font-bold hover:text-blue-800 mr-2">{{ __('Download Invoice') }}</a>
+                                                        <a href="{{ route('admin.download-purchase-invoide.pdf', $inventoryMaster->id) }}" class="bg-[#007bff]  text-white p-2  mr-2">{{ __('Download Invoice') }}</a>
                                                     @endif
                                                     <a href="{{ route('inventory-masters.show', $inventoryMaster->id) }}" class="text-gray-600 font-bold hover:text-gray-900 mr-2">{{ __('Show') }}</a>
-                                                    <a href="{{ route('inventory-masters.edit', $inventoryMaster->id) }}" class="text-indigo-600 font-bold hover:text-indigo-900  mr-2">{{ __('Edit') }}</a>
+                                                    <!-- <a href="{{ route('inventory-masters.edit', $inventoryMaster->id) }}" class="text-indigo-600 font-bold hover:text-indigo-900  mr-2">{{ __('Edit') }}</a> -->
                                                     @csrf
                                                     @method('DELETE')
                                                     <a href="{{ route('inventory-masters.destroy', $inventoryMaster->id) }}" class="text-red-600 font-bold hover:text-red-900" onclick="event.preventDefault(); confirm('Are you sure to delete?') ? this.closest('form').submit() : false;">{{ __('Delete') }}</a>
@@ -117,6 +117,7 @@
                 altInput: false,
                 altFormat: "F j, Y",
                 //minDate: "today",
+                maxDate: "today",
                 onChange: function (selectedDates) {
                     if (selectedDates.length > 0) {
                         // Set minDate of to_date as the next day
@@ -130,7 +131,7 @@
                 dateFormat: "Y-m-d",
                 altInput: false,
                 altFormat: "F j, Y",
-                minDate: "today"
+                maxDate: "today"
             });
 
         })

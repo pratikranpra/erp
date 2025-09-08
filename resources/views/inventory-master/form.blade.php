@@ -12,18 +12,19 @@
             <option value="1" {{  $inventoryMaster?->in_out_type == "1"?"selected":"" }}>GRN - Goods received note (In)</option>
             <option value="2" {{  $inventoryMaster?->in_out_type == "2"?"selected":"" }}>Purchase Return (Out)</option>
             <option value="3" {{  $inventoryMaster?->in_out_type == "3"?"selected":"" }}>Sale Return (In)</option>
-            <option value="4" {{  $inventoryMaster?->in_out_type == "4"?"selected":"" }}>Production Progress (child - out, parent - in)</option>
-            <option value="5" {{  $inventoryMaster?->in_out_type == "5"?"selected":"" }}>Production completed (child - out, parent - in)</option>
+            <!-- <option value="4" {{  $inventoryMaster?->in_out_type == "4"?"selected":"" }}>Production Progress (child - out, parent - in)</option>
+            <option value="5" {{  $inventoryMaster?->in_out_type == "5"?"selected":"" }}>Production completed (child - out, parent - in)</option> -->
             <option value="6" {{  $inventoryMaster?->in_out_type == "6"?"selected":"" }}>Transfer In (in)</option>
             <option value="7" {{  $inventoryMaster?->in_out_type == "7"?"selected":"" }}>Transfer Out (out)</option>
-            <option value="8" {{  $inventoryMaster?->in_out_type == "8"?"selected":"" }}>Stock Adjustment (in / out)</option>
+            <option value="8" {{  $inventoryMaster?->in_out_type == "8"?"selected":"" }}>Stock Adjustment (out)</option>
+            <option value="9" {{  $inventoryMaster?->in_out_type == "9"?"selected":"" }}>Stock Adjustment (in)</option>
             
         </select>
         <x-input-error class="mt-2" :messages="$errors->get('in_out_type')" />
     </div>
     <div>
         <x-input-label for="remark" :value="__('Remark')"/>
-        <x-text-input id="remark" name="remark" type="text" class="mt-1 block w-full" :value="old('remark', $inventoryMaster?->remark)" autocomplete="remark" placeholder="Remark"/>
+        <textarea id="remark" name="remark" type="text" class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm" rows="5" autocomplete="remark" placeholder="remark">{{ old('remark', $inventoryMaster?->remark) }}</textarea>
         <x-input-error class="mt-2" :messages="$errors->get('remark')"/>
     </div>
     <div>

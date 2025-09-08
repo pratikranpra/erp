@@ -18,11 +18,12 @@ class InventoryMasterController extends Controller
         1 => 'GRN - Goods received note (In)',
         2 => 'Purchase Return (Out)',
         3 => 'Sale Return (In)',
-        4 => 'Production Progress (child - out, parent - in)',
-        5 => 'Production completed (child - out, parent - in)',
+        // 4 => 'Production Progress (child - out, parent - in)',
+        // 5 => 'Production completed (child - out, parent - in)',
         6 => 'Transfer In (in)',
         7 => 'Transfer Out (out)',
-        8 => 'Stock Adjustment (in / out)',
+        8 => 'Stock Adjustment (out)',
+        9 => 'Stock Adjustment (in)',
     ];
     public function __construct(){
         $this->inOutTypes = $this->inOutTypes;
@@ -76,6 +77,16 @@ class InventoryMasterController extends Controller
             } catch (\Exception $e) {
                 return Redirect::route('inventory-masters.index')
                     ->with('error', 'Error in updating item stock qty: ' . $e->getMessage());
+            }
+        }else{
+             $item_id = $inventory->item_id;
+            try {
+                $item = Item::findOrFail($item_id);
+                $item->increment('child_qty', $inventory->qty);
+
+            } catch (\Exception $e) {
+                return Redirect::route('inventory-masters.index')
+                    ->with('error', 'Error in updating item Add stock qty: ' . $e->getMessage());
             }
         }
         return Redirect::route('inventory-masters.index')
