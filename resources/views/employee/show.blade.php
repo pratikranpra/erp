@@ -1,4 +1,4 @@
-<x-app-layout>
+<x-app-layout :title="__('Show Employee')">
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
             {{ $employee->name ?? __('Show') . " " . __('Employee') }}

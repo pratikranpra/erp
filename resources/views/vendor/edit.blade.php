@@ -1,4 +1,4 @@
-<x-app-layout>
+<x-app-layout :title="__('Edit Vendor')">
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
             {{ __('Update') }} Vendor
